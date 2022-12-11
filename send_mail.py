@@ -1,22 +1,17 @@
 from flask_mail import Mail, Message
+from flask import render_template
 from models import app
-# from config import SendMail
+from config import SendMail
 
-# app.config.from_object(SendMail)
-# mail = Mail(app)
-
-
-# def send_mail(name, email, phone_num, message):
-#     msg = Message('Feedback')
-#     address = 'maytrix.cafe@gmail.com'
-#     msg.recipients.append(str(address))
-#     msg.body = "Name : " + name + "\nEmail : " + email + "\nPhone Num. : " + phone_num + "\nMessage : " + message
-#     mail.send(msg)
+app.config.from_object(SendMail)
+mail = Mail(app)
 
 
-# def send_order_mail(email):
-#     msg = Message('New Order')
-#     address = email
-#     msg.recipients.append(str(address))
-#     msg.body = "You have received a new order."
-#     mail.send(msg)
+def send_project_status_mail(project, week_end_date):
+    msg = Message(f'Status of {project.project_name} for week ending {week_end_date}')
+    address = project.project_daily_report_email.split(",")
+    for email in address:
+        print(email)
+        msg.recipients.append(str(email))
+    msg.html = render_template("project_status_mail.html", project=project)
+    mail.send(msg)

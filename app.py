@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect, url_for
 from models import app, db, ProjectDetails
+from send_mail import send_project_status_mail
 from config import Config
 from datetime import datetime, timedelta
 import uuid
@@ -76,6 +77,12 @@ def delete_project(project_id):
     db.session.commit()
     return redirect(url_for('project_home'))
 
+
+@app.route('/project-status-mail')
+def project_status_mail():
+    project = ProjectDetails.query.filter_by(project_id=request.args.get('project_id')).first()
+    send_project_status_mail(project, project.project_end_date)
+    return redirect(url_for('project_home'))
 
 if __name__ == '__main__':
     app.run(debug=True)

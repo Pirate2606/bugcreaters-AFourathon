@@ -8,3 +8,15 @@ class Config(object):
     SECRET_KEY = "supersecret" or os.environ.get("FLASK_SECRET_KEY")
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data.sqlite') or os.environ.get('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
+class SendMail(object):
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
+    MAIL_USERNAME = 'royalenaitan@gmail.com'
+    MAIL_PASSWORD = 'fhcnvibwngmpfetx'
+    MAIL_DEFAULT_SENDER = 'royalenaitan@gmail.com'
+    MAIL_MAX_EMAILS = None
+    MAIL_ASCII_ATTACHMENTS = False

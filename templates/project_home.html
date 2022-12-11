@@ -1,44 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+{% extends "base.html" %}
 
-    <title>All Project</title>
+{% block head %}
+<title>All Projects</title>
+{% endblock %}
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
-    <!-- <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}"> -->
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{% block content %}
 
-    <!-- Google Fonts -->
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet" />
-
-    <link href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1581152092/smartwizard/smart_wizard.min.css"
-        rel="stylesheet" type="text/css" />
-    <link
-        href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1581152091/smartwizard/smart_wizard_theme_arrows.min.css"
-        rel="stylesheet" type="text/css" />
-
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
-
-    <!-- Custom Styles -->
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/project_form.css') }}" /> -->
-
-    <!-- Fontawesome CDN -->
-    <script src="https://kit.fontawesome.com/2d90f493fa.js" crossorigin="anonymous"></script>
-
-    <script type="text/javascript"
-        src="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1581152197/smartwizard/jquery.smartWizard.min.js"></script>
-</head>
-<body>
+    <div class="container">
+        <form method="POST">
+            <input name="week" type="week">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
     <main role="main" class="container mb-2">
         <section class="pt-2">
             <table class="table table shadow bg-white rounded table-hover">
@@ -55,7 +28,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for project in projects %}
+                    {% for project in all_projects %}
                     <tr class='clickable-row' style="cursor: default;">
                         <th class="py-3" scope="row">{{ loop.index }}</th>
                         <td class="pb-2 pt-3 d-none d-lg-table-cell">
@@ -87,5 +60,5 @@
             </table>
         </section>
     </main>
-</body>
-</html>
+
+{% endblock %}

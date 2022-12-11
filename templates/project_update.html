@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Update Project</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/project_form.css') }}" />
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container-sm text-center">
+    <br>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-dismissible fade show" role="alert" style="background-color:#ffc06d; color:black;">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+    {% endwith %}
+</div>
+
+
+<div class="container register">
+    <div class="row">
+        <div class="col-md-3 register-left pt-lg-5 mt-lg-5">
+            <i class="fa-solid fa-5x fa-diagram-project"></i>
+            <br>
+            <h3 style="padding-top: 30px;">Project Portal</h3>
+            <p style="font-weight: 400;">Please register your project here!</p>
+        </div>
+        <div class="col-md-9 register-right">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <h3 class="register-heading">
+                        Update Project
+                    </h3>
+                    <form method="POST" , enctype="multipart/form-data">
+                        <div class="row register-form">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Project name *</label>
+                                    <input type="text" class="form-control" placeholder="Project Name *" value="{{ project.project_name }}"
+                                        name="project_name" required />
+                                </div>
+                                <div class="form-group">
+                                    <label>Project start date *</label>
+                                    <input type="text" class="form-control" placeholder="Start Date *"
+                                        value="{{ project.project_start_date }}"
+                                        name="project_start_date" required onfocus="(this.type='date')"
+                                        onblur="if(!this.value)this.type='text'" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Project end date *</label>
+                                    <input type="text" class="form-control" placeholder="End Date *"
+                                        value="{{ project.project_end_date }}"
+                                        name="project_end_date" required onfocus="(this.type='date')"
+                                        onblur="if(!this.value)this.type='text'" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Manager name *</label>
+                                    <input type="text" class="form-control" placeholder="Project Manager Name *"
+                                        value="{{ project.project_manager_name }}" name="project_manager_name" required />
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">
+                                                Status
+                                            </label>
+                                        </div>
+                                        <select class="custom-select" name="project_status" id="project_status">
+                                            <option selected>{{ project.project_status }}</option>
+                                            <option value="in-progress">In Progress</option>
+                                            <option value="blocked">Blocked</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="PTO">PTO</option>
+                                            <option value="in-review">In Review</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="col-md-6">
+                                
+                                <div class="form-group">
+                                    <label>Manager email *</label>
+                                    <input type="email" class="form-control" placeholder="Project Manager Email *"
+                                        value="{{ project.project_manager_email }}"
+                                        name="project_manager_email" required />
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">
+                                                Risk
+                                            </label>
+                                        </div>
+                                        <select class="custom-select" name="project_risk" id="project_risk">
+                                            <option selected>{{ project.project_risk }}</option>
+                                            <option value="v-high">Very High</option>
+                                            <option value="high">High</option>
+                                            <option value="normal">Normal</option>
+                                            <option value="low">Low</option>
+                                            <option value="v-low">Very Low</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Mailing List *</label>
+                                    <textarea style="height: 100px" class="form-control"
+                                        name="project_daily_report_email" placeholder="Enter emails seperated by comma"
+                                        required>{{ project.project_daily_report_email }},
+                                    </textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Highlights</label>
+                                    <textarea style="height: 100px" class="form-control" name="project_highlights"
+                                        placeholder="Comments..." required>
+                                    </textarea>
+                                </div>
+                                
+                                <input type="submit" class="btnRegister" value="Update" />
+                                <a href="{{ url_for('project_home') }}" style="text-align: center; text-decoration: none;" class="btnRegisterCancel">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

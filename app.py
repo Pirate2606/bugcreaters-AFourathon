@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for
 from models import app, db, ProjectDetails
 from config import Config
-from datetime import datetime
+from datetime import datetime, timedelta
 import uuid
 
 
@@ -15,10 +15,18 @@ def before_first_request():
     db.session.commit()
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def project_home():
     projects = ProjectDetails.query.all()
-    return render_template('project_home.html', projects=projects)
+    if request.method == 'POST':
+        week_start_date = datetime.strptime(request.form["week"] + '-1', "%Y-W%W-%w")
+        week_end_date = week_start_date + timedelta(days=4)
+        all_projects = []
+        for project in projects:
+            if (project.project_start_date >= week_start_date and project.project_start_date <= week_end_date) or (project.project_start_date <= week_start_date and project.project_end_date >= week_start_date):
+                all_projects.append(project)
+        return render_template('project_home.html', all_projects=all_projects)
+    return render_template('project_home.html', all_projects=projects)
 
 
 @app.route('/register-project', methods=['GET', 'POST'])
@@ -45,18 +53,20 @@ def register_project():
 
 @app.route('/edit-project/<project_id>', methods=['GET', 'POST'])
 def edit_project(project_id):
-    print(project_id)
     project = ProjectDetails.query.filter_by(project_id=project_id).first()
     if request.method == 'POST':
         project.project_name = request.form['project_name']
-        project.project_start_date = request.form['project_start_date']
-        project.project_end_date = request.form['project_end_date']
+        project.project_start_date = datetime.strptime(request.form['project_start_date'], '%Y-%m-%d %H:%M:%S').date()
+        project.project_end_date = datetime.strptime(request.form['project_end_date'], '%Y-%m-%d %H:%M:%S').date()
         project.project_manager_name = request.form['project_manager_name']
         project.project_manager_email = request.form['project_manager_email']
         project.project_daily_report_email = request.form['project_daily_report_email']
+        project.project_status = request.form['project_status']
+        project.project_risk = request.form['project_risk']
+        project.project_highlights = request.form['project_highlights']
         db.session.commit()
         return redirect(url_for('project_home'))
-    return render_template('project_form.html', project=project)
+    return render_template('project_update.html', project=project)
 
 
 @app.route('/delete-project/<project_id>', methods=['GET', 'POST'])

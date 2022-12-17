@@ -9,3 +9,15 @@ class Config(object):
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///F:\\Programs\\Hackathons\\AFourathon_2.0\\data.sqlite'
     SQLALCHEMY_DATABASE_URI = 'postgresql://aditya:Supersecret@db:5432/projectA'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
+class SendMailConfig(object):
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
+    MAIL_USERNAME = 'royalenaitan@gmail.com'
+    MAIL_PASSWORD = 'fhcnvibwngmpfetx'
+    MAIL_DEFAULT_SENDER = 'royalenaitan@gmail.com'
+    MAIL_MAX_EMAILS = None
+    MAIL_ASCII_ATTACHMENTS = False

@@ -31,13 +31,13 @@
             <i class="fa-solid fa-5x fa-diagram-project"></i>
             <br>
             <h3 style="padding-top: 30px;">Project Portal</h3>
-            <p style="font-weight: 400;">Please register your project here!</p>
+            <p style="font-weight: 400;">Update the details for project "{{ project.project_name }}"</p>
         </div>
         <div class="col-md-9 register-right">
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <h3 class="register-heading">
-                        Update Project
+                        Update Project: {{ project.project_name }}
                     </h3>
                     <form method="POST" , enctype="multipart/form-data">
                         <div class="row register-form">
@@ -83,6 +83,12 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label>Week ending date *</label>
+                                    <input type="text" class="form-control" placeholder="Week ending date *"
+                                        name="week_ending_date" required onfocus="(this.type='date')"
+                                        onblur="if(!this.value)this.type='text'" />
+                                </div>
                                 
                             </div>
                             <div class="col-md-6">
@@ -119,7 +125,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Highlights</label>
-                                    <textarea style="height: 100px" class="form-control" name="project_highlights"
+                                    <textarea style="height: 150px" class="form-control" name="project_highlights"
                                         placeholder="Comments..." required>
                                     </textarea>
                                 </div>

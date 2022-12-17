@@ -4,10 +4,13 @@ from send_mail import send_project_status_mail
 from config import Config
 from datetime import datetime, timedelta
 import uuid
+import requests
 
 
 app.config.from_object(Config)
 db.init_app(app)
+PROJECT_URL = 'http://127.0.0.1:5001'
+# PROJECT_URL = 'http://api-service:5001'
 
 
 @app.before_first_request
@@ -39,15 +42,17 @@ def register_project():
         project_manager_name = request.form['project_manager_name']
         project_manager_email = request.form['project_manager_email']
         project_daily_report_email = request.form['project_daily_report_email']
-        project = ProjectDetails(project_id=uuid.uuid4().hex[:8],
-                                 project_name=project_name,
-                                 project_start_date=datetime.strptime(project_start_date, '%Y-%m-%d'),
-                                 project_end_date=datetime.strptime(project_end_date, '%Y-%m-%d'),
-                                 project_manager_name=project_manager_name,
-                                 project_manager_email=project_manager_email,
-                                 project_daily_report_email=project_daily_report_email)
-        db.session.add(project)
-        db.session.commit()
+        
+        project_data = {"project_id": uuid.uuid4().hex[:8],
+                        "project_name": project_name, 
+                        "project_start_date": project_start_date, 
+                        "project_end_date": project_end_date, 
+                        "project_manager_name": project_manager_name, 
+                        "project_manager_email": project_manager_email, 
+                        "project_daily_report_email": project_daily_report_email
+                        }
+        
+        requests.post(f"{PROJECT_URL}/register-project", json=project_data)
         return redirect(url_for('project_home'))
     return render_template('project_form.html')
 
@@ -56,25 +61,25 @@ def register_project():
 def edit_project(project_id):
     project = ProjectDetails.query.filter_by(project_id=project_id).first()
     if request.method == 'POST':
-        project.project_name = request.form['project_name']
-        project.project_start_date = datetime.strptime(request.form['project_start_date'], '%Y-%m-%d %H:%M:%S').date()
-        project.project_end_date = datetime.strptime(request.form['project_end_date'], '%Y-%m-%d %H:%M:%S').date()
-        project.project_manager_name = request.form['project_manager_name']
-        project.project_manager_email = request.form['project_manager_email']
-        project.project_daily_report_email = request.form['project_daily_report_email']
-        project.project_status = request.form['project_status']
-        project.project_risk = request.form['project_risk']
-        project.project_highlights = request.form['project_highlights']
-        db.session.commit()
+        project_data = {"project_id": project_id,
+                        "project_name": request.form['project_name'],
+                        "project_start_date": request.form['project_start_date'],
+                        "project_end_date": request.form['project_end_date'],
+                        "project_manager_name": request.form['project_manager_name'],
+                        "project_manager_email": request.form['project_manager_email'],
+                        "project_daily_report_email": request.form['project_daily_report_email'],
+                        "project_status": request.form['project_status'],
+                        "project_risk": request.form['project_risk'],
+                        "project_highlights": request.form['project_highlights']
+                        }
+        requests.put(f"{PROJECT_URL}/edit-project/{project_id}", json=project_data)
         return redirect(url_for('project_home'))
     return render_template('project_update.html', project=project)
 
 
 @app.route('/delete-project/<project_id>', methods=['GET', 'POST'])
 def delete_project(project_id):
-    project = ProjectDetails.query.filter_by(project_id=project_id).first()
-    db.session.delete(project)
-    db.session.commit()
+    requests.delete(f"{PROJECT_URL}/delete-project/{project_id}")
     return redirect(url_for('project_home'))
 
 

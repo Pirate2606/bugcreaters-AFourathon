@@ -17,3 +17,4 @@ class ProjectDetails(db.Model):
     project_status = db.Column(db.String(256), default="")
     project_risk = db.Column(db.String(256), default="")
     project_highlights = db.Column(db.String(256), default="")
+    week_ending_date = db.Column(db.DateTime)

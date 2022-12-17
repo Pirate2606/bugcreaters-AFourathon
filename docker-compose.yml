@@ -1,9 +1,13 @@
 version: '3'
 services:
-    api-service:
+    project-micro-app:
         build: ./project-micro-app/
         ports: 
             - 5001:5001
+    email-report-micro-app:
+        build: ./email-report-micro-app/
+        ports: 
+            - 5002:5002
     web:
         build: ./
         ports:

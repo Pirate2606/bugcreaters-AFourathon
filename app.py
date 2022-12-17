@@ -1,6 +1,5 @@
 from flask import render_template, request, redirect, url_for
 from models import app, db, ProjectDetails
-from send_mail import send_project_status_mail
 from config import Config
 from datetime import datetime, timedelta
 import uuid
@@ -9,8 +8,10 @@ import requests
 
 app.config.from_object(Config)
 db.init_app(app)
-PROJECT_URL = 'http://127.0.0.1:5001'
-# PROJECT_URL = 'http://project-micro-app:5001'
+# PROJECT_MICRO_APP_URL = 'http://127.0.0.1:5001'
+# EMAIL_REPORT_MICRO_APP_URL = 'http://127.0.0.1:5002'
+PROJECT_MICRO_APP_URL = 'http://project-micro-app:5001'
+EMAIL_REPORT_MICRO_APP_URL = 'http://email-report-micro-app:5002'
 
 
 @app.before_first_request
@@ -52,7 +53,7 @@ def register_project():
                         "project_daily_report_email": project_daily_report_email
                         }
         
-        requests.post(f"{PROJECT_URL}/register-project", json=project_data)
+        requests.post(f"{PROJECT_MICRO_APP_URL}/register-project", json=project_data)
         return redirect(url_for('project_home'))
     return render_template('project_form.html')
 
@@ -72,22 +73,22 @@ def edit_project(project_id):
                         "project_risk": request.form['project_risk'],
                         "project_highlights": request.form['project_highlights']
                         }
-        requests.put(f"{PROJECT_URL}/edit-project/{project_id}", json=project_data)
+        requests.put(f"{PROJECT_MICRO_APP_URL}/edit-project/{project_id}", json=project_data)
         return redirect(url_for('project_home'))
     return render_template('project_update.html', project=project)
 
 
 @app.route('/delete-project/<project_id>', methods=['GET', 'POST'])
 def delete_project(project_id):
-    requests.delete(f"{PROJECT_URL}/delete-project/{project_id}")
+    requests.delete(f"{PROJECT_MICRO_APP_URL}/delete-project/{project_id}")
     return redirect(url_for('project_home'))
 
 
 @app.route('/project-status-mail')
 def project_status_mail():
-    project = ProjectDetails.query.filter_by(project_id=request.args.get('project_id')).first()
-    send_project_status_mail(project, project.project_end_date)
+    requests.get(f"{EMAIL_REPORT_MICRO_APP_URL}/send-project-status-mail/{request.args.get('project_id')}")
     return redirect(url_for('project_home'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

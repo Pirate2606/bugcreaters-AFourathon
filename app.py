@@ -10,7 +10,7 @@ import requests
 app.config.from_object(Config)
 db.init_app(app)
 PROJECT_URL = 'http://127.0.0.1:5001'
-# PROJECT_URL = 'http://api-service:5001'
+# PROJECT_URL = 'http://project-micro-app:5001'
 
 
 @app.before_first_request

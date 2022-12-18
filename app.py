@@ -71,7 +71,8 @@ def edit_project(project_id):
                         "project_daily_report_email": request.form['project_daily_report_email'],
                         "project_status": request.form['project_status'],
                         "project_risk": request.form['project_risk'],
-                        "project_highlights": request.form['project_highlights']
+                        "project_highlights": request.form['project_highlights'],
+                        "week_ending_date": request.form['week_ending_date']
                         }
         requests.put(f"{PROJECT_MICRO_APP_URL}/edit-project/{project_id}", json=project_data)
         return redirect(url_for('project_home'))

@@ -82,9 +82,38 @@
                                     <strong>Project mailing list: </strong>
                                     <p>
                                         {% for p in project.project_daily_report_email.split(',') %}
+                                        {% if '@' in p %}
                                             <b>{{ loop.index }}.</b> {{ p }} <br>
+                                        {% endif %}
                                         {% endfor %}
                                     </p>
+                                    {% if project.project_status != '' %}
+                                    <hr>
+                                     <p>
+                                        <strong>Project status: </strong>{{ project.project_status|capitalize }}
+                                     </p>
+                                    {% endif %}
+                                    {% if project.project_risk != '' %}
+                                    <hr>
+                                     <p>
+                                        <strong>Project risk: </strong>{{ project.project_risk|capitalize }}
+                                     </p>
+                                    {% endif %}
+                                    {% if project.week_ending_date is not none %}
+                                    <hr>
+                                     <p>
+                                        <strong>Week Ending Date: </strong>{{ project.week_ending_date.strftime('%d %b, %Y') }}
+                                     </p>
+                                    {% endif %}
+                                    {% if project.project_highlights != '' %}
+                                    <hr>
+                                     <p>
+                                        <strong>Project highlights: </strong>
+                                        <p>
+                                            {{ project.project_highlights|capitalize }}
+                                        </p>
+                                     </p>
+                                    {% endif %}
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

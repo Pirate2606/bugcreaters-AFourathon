@@ -54,18 +54,32 @@ class DeleteProject(Resource):
 class UpdateProject(Resource):
     def put(self, project_id):
         project_data = request.get_json()
+        try:
+            project_start_date = datetime.strptime(project_data['project_start_date'], "%Y-%m-%d %H:%M:%S").date()
+        except:
+            project_start_date = datetime.strptime(project_data['project_start_date'], "%Y-%m-%d")
+        try:
+            project_end_date = datetime.strptime(project_data['project_end_date'], "%Y-%m-%d %H:%M:%S").date()
+        except:
+            project_end_date = datetime.strptime(project_data['project_end_date'], "%Y-%m-%d")
+        try:
+            week_ending_date = datetime.strptime(project_data['week_ending_date'], "%Y-%m-%d %H:%M:%S").date()
+        except:
+            week_ending_date = datetime.strptime(project_data['week_ending_date'], "%Y-%m-%d")
+        
         db.engine.execute(f'''
                           UPDATE project_details 
                           SET 
                             project_name = '{project_data['project_name']}',
-                            project_start_date = '{datetime.strptime(project_data['project_start_date'], '%Y-%m-%d')}',
-                            project_end_date = '{datetime.strptime(project_data['project_end_date'], '%Y-%m-%d')}',
+                            project_start_date = '{project_start_date}',
+                            project_end_date = '{project_end_date}',
                             project_manager_name = '{project_data['project_manager_name']}',
                             project_manager_email = '{project_data['project_manager_email']}',
                             project_daily_report_email = '{project_data['project_daily_report_email']}',
                             project_status = '{project_data['project_status']}',
                             project_risk = '{project_data['project_risk']}',
-                            project_highlights = '{project_data['project_highlights']}'
+                            project_highlights = '{project_data['project_highlights']}',
+                            week_ending_date = '{week_ending_date}'
                           WHERE
                             project_id = '{project_id}'
                           ''')

@@ -10,10 +10,10 @@ mail = Mail(app)
 
 
 def send_project_status_mail(project):
-    msg = Message(f'Status of {project.project_name} for week ending {project.week_end_date}')
+    msg = Message(f'Status of {project.project_name} for week ending {project.week_ending_date.strftime("%d %b, %Y")}')
     address = project.project_daily_report_email.split(",")
     for email in address:
-        if len(email) > 0:
+        if '@' in email:
             msg.recipients.append(str(email))
     msg.html = render_template("project_status_mail.html", project=project)
     mail.send(msg)

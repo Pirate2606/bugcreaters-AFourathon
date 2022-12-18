@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>New Skill</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/project_form.css') }}" />
+{% endblock %}
+    
+{% block content %}
+    <div class="container register">
+        <div class="row">
+            <div class="col-md-3 register-left pt-lg-5 mt-lg-5">
+                <i class="fa-solid fa-5x fa-diagram-project"></i>
+                <br>
+                <h3 style="padding-top: 30px;">Skill Portal</h3>
+                <p style="font-weight: 400;">Please register new skill here!</p>
+            </div>
+            <div class="col-md-9 register-right">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h3 class="register-heading">
+                            Add Skill
+                        </h3>
+                        <form method="POST" , enctype="multipart/form-data">
+                            <div class="row register-form">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">Skill *</span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Skill Name..." 
+                                                aria-label="Username" aria-describedby="basic-addon1"
+                                                name="skill_name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text" for="inputGroupSelect01">
+                                                    Domain *
+                                                </label>
+                                            </div>
+                                            <select class="custom-select" name="skill_domain" id="project_status">
+                                                <option selected>Select...</option>
+                                                <option value="Leadership">Leadership</option>
+                                                <option value="Business">Business</option>
+                                                <option value="Tech">Tech</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <input type="submit" class="btnRegister" value="Add" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

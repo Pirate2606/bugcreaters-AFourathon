@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Register</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/project_form.css') }}" />
+{% endblock %}
+
+{% block content %}
+    <div class="login-div">
+        <div class="form-div">
+            <form class="login-form" method="POST">
+                <div class="logo">
+                    <h3>
+                        <img style="width: 11rem;" src="{{ url_for('static', filename='assets/full_logo.png') }}"
+                            alt="shield image" />
+                    </h3>
+                </div>
+                <div class="register">
+                    <h6>
+                        Already registered?
+                        <a style="text-decoration: none; opacity: 0.8" href="{{ url_for('login') }}">
+                            Login
+                        </a>
+                    </h6>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user"></i>
+                    </span>
+                    <input name="user_name" type="text" class="form-control" placeholder="Username"
+                        aria-describedby="basic-addon1" required />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-lock"></i>
+                    </span>
+                    <input name="password" type="password" class="form-control" placeholder="Password"
+                        aria-describedby="basic-addon2" required />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon5"><i class="fa-solid fa-lock"></i>
+                    </span>
+                    <input name="confirm_password" type="password" class="form-control" placeholder="Confirm Password"
+                        aria-describedby="basic-addon2" required />
+                </div>
+                {% if password_flag == True %}
+                <h6 style="color: #f85c52; font-size:13px; padding-top: 5px;">Both password does not match.</h6>
+                {% endif %}
+                <button style="width: 100%" class="btn btn-dark" type="submit">
+                    Register
+                </button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Skills</title>
+{% endblock %}
+
+{% block content %}
+
+    <header>
+        <nav style="background-color: #1d1919" class="navbar navbar-expand-lg navbar-dark mb-5">
+            <a style="font-size: 30px" class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/site_logo.png') }}" width="70" height="70" alt="">
+                PM
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse ml-5" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a style="font-size: 20px;" class="nav-link" href="{{ url_for('home') }}">Home <span
+                                class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a style="font-size: 20px;" class="nav-link" href="{{ url_for('add_skills') }}">
+                            Add Skill
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+{% endblock %}

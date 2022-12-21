@@ -25,10 +25,20 @@ class AddSkill(Resource):
                             );
                         '''
                         )
-        return {"message": "Skill added successfully"}, 200
+        return {"message": "Skill added successfully"}
+
+
+class GetSkills(Resource):
+    def get(self):
+        skills = []
+        results = db.engine.execute('SELECT * FROM skills;')
+        for result in results:
+            skills.append(dict(result))
+        return {"skills": skills}
 
 
 api.add_resource(AddSkill, '/add-skill')
+api.add_resource(GetSkills, '/get-skills')
 
 
 if __name__ == '__main__':

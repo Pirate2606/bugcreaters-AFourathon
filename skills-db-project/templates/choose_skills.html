@@ -6,58 +6,205 @@
 {% endblock %}
 
 {% block content %}
-<div class="container register">
-    <div class="row">
-        <div class="col-md-3 register-left pt-lg-5 mt-lg-5">
-            <i class="fa-solid fa-5x fa-diagram-project"></i>
-            <br>
-            <h3 style="padding-top: 30px;">Skill Portal</h3>
-            <p style="font-weight: 400;">Please select your skill here!</p>
-        </div>
-        <div class="col-md-9 register-right">
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <h3 class="register-heading">
-                        Choose Skills
-                    </h3>
-                    <form method="POST" , enctype="multipart/form-data">
-                        <div class="row register-form">
-                            <div class="col-md-6">
-                                <div class="form-group">
+
+    <header>
+        <nav style="background-color: #1d1919" class="navbar navbar-expand-lg navbar-dark mb-5">
+            <a style="font-size: 30px" class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/site_logo.png') }}" width="70" height="70" alt="">
+                PM
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse ml-5" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a style="font-size: 20px;" class="nav-link" href="{{ url_for('home') }}">Home <span
+                                class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a style="font-size: 20px;" class="nav-link" href="{{ url_for('add_skills') }}">
+                            Create Skill
+                        </a>
+                    </li>
+                </ul>
+                {% if login_flag %}
+                <div class="form-inline my-2 my-lg-0">
+                    <a style="font-size: 20px; color: grey;" class="nav-link" href="{{ url_for('login') }}">
+                        SignIn
+                    </a>
+                </div>
+                <div class="form-inline my-2 my-lg-0 mr-4">
+                    <a style="font-size: 20px; color: grey;" class="nav-link" href="{{ url_for('register') }}">
+                        SignUp
+                    </a>
+                </div>
+                {% else %}
+                <div class="form-inline my-2 my-lg-0">
+                    <a style="font-size: 20px; color: white;" class="nav-link" href="{{ url_for('choose_skills') }}">
+                        Add Skills
+                    </a>
+                </div>
+                <div class="form-inline my-2 my-lg-0 mr-4">
+                    <a style="font-size: 20px; color: grey;" class="nav-link" href="{{ url_for('logout') }}">
+                        Logout
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+<main role="main" class="container mb-2">
+    <section class="pt-2">
+        <h2>Add New Skill</h2>
+        <hr>
+        <table class="table table shadow bg-white rounded table-hover">
+            <thead style="background-color: #e1e5ea;">
+                <tr class="py-3">
+                    <th class="py-3" scope="col">#</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Domain*</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Skill*</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Skill Level*</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">YOE*</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Add</th>
+                </tr>
+            </thead>
+            <tbody>
+                        <form method="post">
+                            <tr class='clickable-row mt-5' style="cursor: default;">
+                                <th class="py-3" scope="row">1</th>
+                                <td class="pb-2 pt-3 d-none d-lg-table-cell">
                                     <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1">Skill *</span>
-                                        </div>
-                                        <input type="text" class="form-control" placeholder="Skill Name..."
-                                            aria-label="Username" aria-describedby="basic-addon1" name="skill_name">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text" for="inputGroupSelect01">
-                                                Domain *
-                                            </label>
-                                        </div>
-                                        <select class="custom-select" name="skill_domain" id="project_status">
+                                        <select class="custom-select" name="skill_domain" onchange="fillSkills()" id="skill_domain_form" required>
                                             <option selected>Select...</option>
                                             <option value="Leadership">Leadership</option>
                                             <option value="Business">Business</option>
                                             <option value="Tech">Tech</option>
                                         </select>
                                     </div>
-                                </div>
-                                <input type="submit" class="btnRegister" value="Create" />
-                            </div>
+                                </td>
+                                <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                                    <div class="input-group mb-3">
+                                        <select class="custom-select" name="skill_name" id="skill_name_form" required>
+                                            <option selected>Select...</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                                    <div class="input-group mb-3">
+                                        <select class="custom-select" name="skill_level" required>
+                                            <option selected>Select...</option>
+                                            <option value="Basic">Basic</option>
+                                            <option value="Intermediate">Intermediate</option>
+                                            <option value="Expert">Expert</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td class="pb-2 pt-3">
+                                    <div class="input-group input-group mb-3">
+                                        <input name="yoe" type="number" class="form-control" placeholder="YOE" aria-describedby="basic-addon1"
+                                            required />
+                                    </div>
+                                </td>
+                                <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                                    <button class="btn btn-md btn-outline-success" type="submit">Add</button>
+                                </td>
+                            </tr>
+                        </form>
+            </tbody>
+        </table>
+
+        <h2 class="mt-5">Your Skills</h2>
+        <hr>
+        <table class="table table shadow bg-white rounded table-hover mb-5">
+            <thead style="background-color: #e1e5ea;">
+                <tr class="py-3">
+                    <th class="py-3" scope="col">#</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Domain</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Skill</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Skill Level</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">YOE</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Update</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for skill in skills %}
+                <tr class='clickable-row' style="cursor: default;">
+                    <th class="py-3" scope="row">{{ loop.index }}</th>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <div class="input-group mb-3">
+                            <select class="custom-select" name="skill_domain_{{ skill.id }}" disabled>
+                                <option selected>{{ skill.skill_domain }}</option>
+                                <option value="Leadership">Leadership</option>
+                                <option value="Business">Business</option>
+                                <option value="Tech">Tech</option>
+                            </select>
                         </div>
-                    </form>
-                </div>
-                <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab"></div>
-            </div>
-        </div>
-    </div>
-</div>
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <div class="input-group mb-3">
+                            <select class="custom-select" name="skill_name_{{ skill.id }}" disabled>
+                                <option selected>{{ skill.skill_name }}</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <div class="input-group mb-3">
+                            <select class="custom-select" name="skill_level_{{ skill.id }}">
+                                <option selected>{{ skill.skill_level }}</option>
+                                <option value="Basic">Basic</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Expert">Expert</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td class="pb-2 pt-3">
+                        <div class="input-group input-group mb-3">
+                            <input name="yoe_{{ skill.id }}" type="number" class="form-control" placeholder="YOE" value="{{ skill.yoe }}" aria-describedby="basic-addon1"/>
+                        </div>
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <button style="text-decoration: none;" class="btn btn-md btn-outline-success" onclick="updateSkill('{{ skill.id }}')">
+                            Update
+                    </button>
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <button style="text-decoration: none;" class="btn btn-md btn-outline-danger" onclick="deleteSkill('{{ skill.id }}')">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<script>
+    function fillSkills() {
+        var all_skills = {{ all_skills|tojson }};
+        var selected_domain = document.getElementById("skill_domain_form").value;
+        document.getElementById("skill_name_form").innerHTML = "<option selected>Select...</option>";
+        for (var i = 0; i < all_skills.length; i++) {
+            if (all_skills[i].skill_domain == selected_domain) {
+                document.getElementById("skill_name_form").innerHTML += "<option value='" + all_skills[i].skill_name + "'>" + all_skills[i].skill_name + "</option>";
+            }
+        }
+    }
+
+    function updateSkill(skill_id) {
+        var url = `/update-skill/${skill_id}?l=` + document.getElementsByName(`skill_level_${skill_id}`)[0].value + "&y=" + document.getElementsByName(`yoe_${skill_id}`)[0].value;
+        window.location.href = url;
+    }
+
+    function deleteSkill(skill_id) {
+        var url = `/delete-skill/${skill_id}`;
+        window.location.href = url;
+    }
+</script>
 
 {% endblock %}

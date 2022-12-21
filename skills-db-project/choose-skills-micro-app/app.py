@@ -15,22 +15,53 @@ db.init_app(app)
 JWT_TOKEN_SECRET = "superSecret"
 
 class AddUserSkill(Resource):
-    def post(self, user_id):
+    def post(self):
         project_data = request.get_json()
         db.engine.execute(
-                        f'''
-                        INSERT INTO users_skills (
-                            skill_name, skill_domain, skill_level, yoe) 
-                        VALUES (
-                            '{project_data['skill_name']}',
-                            '{project_data['skill_domain']}',
-                            '{project_data['skill_level']}',
-                            '{project_data['yoe']}'
-                            )
-                        WHERE user_id = {user_id};
-                        '''
-                        )
+            f'''
+            INSERT INTO users_skills (
+                user_id, skill_name, skill_domain, skill_level, yoe) 
+            VALUES (
+                '{project_data['user_id']}',
+                '{project_data['skill_name']}',
+                '{project_data['skill_domain']}',
+                '{project_data['skill_level']}',
+                '{project_data['yoe']}'
+                );
+            '''
+            )
         return {"message": "Skill added successfully"}, 200
+
+
+class GetSkills(Resource):
+    def get(self, user_id):
+        skills = []
+        results = db.engine.execute(f'SELECT * FROM users_skills where user_id = "{user_id}";')
+        for result in results:
+            d = dict(result)
+            if d["skill_name"] is not None:
+                skills.append(d)
+        return {"skills": skills}, 200
+
+
+class UpdateSkill(Resource):
+    def put(self, skill_id):
+        data = request.get_json()
+        db.engine.execute(
+            f'''
+            UPDATE users_skills
+            SET skill_level = "{data['skill_level']}", yoe = "{data['yoe']}"
+            WHERE id = "{skill_id}";
+            '''
+        )
+        
+        return {"message": "Skill updated successfully"}, 200
+
+
+class DeleteSkill(Resource):
+    def delete(self, skill_id):
+        db.engine.execute(f'DELETE FROM users_skills WHERE id = "{skill_id}";')
+        return {"message": "Skill deleted successfully"}, 200
 
 
 class Register(Resource):
@@ -38,7 +69,7 @@ class Register(Resource):
         payload = request.get_json()
         db.engine.execute(
             f'''
-            INSERT INTO users_skills (
+            INSERT INTO users (
                 user_id, full_name, user_name, password)
             VALUES (
                 "{payload['user_id']}",
@@ -57,7 +88,7 @@ class Login(Resource):
         payload = request.get_json()
         users = db.engine.execute(
             f'''
-            SELECT * FROM users_skills WHERE user_name = "{payload['user_name']}";
+            SELECT * FROM users WHERE user_name = "{payload['user_name']}";
             '''
         )
         for user in users:
@@ -66,9 +97,14 @@ class Login(Resource):
                 return {"token": encoded_jwt}, 200
         return {"message": "Invalid credentials"}, 401
 
-api.add_resource(AddUserSkill, '/choose-skills/<user_id>')
+
+api.add_resource(AddUserSkill, '/choose-skills')
+api.add_resource(GetSkills, '/get-skills/<user_id>')
+api.add_resource(UpdateSkill, '/update-skill/<skill_id>')
+api.add_resource(DeleteSkill, '/delete-skill/<skill_id>')
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
+
 
 
 if __name__ == '__main__':

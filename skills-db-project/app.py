@@ -22,40 +22,80 @@ def before_first_request():
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('home.html')
+    login_flag = True
+    if session.get("token"):
+        login_flag = False
+    return render_template('home.html', login_flag=login_flag)
 
 
 @app.route('/add-skills', methods=['GET', 'POST'])
 def add_skills():
+    login_flag = True
+    if session.get("token"):
+        login_flag = False
     if request.method == 'POST':
         skill_name = request.form['skill_name']
         skill_domain = request.form['skill_domain']
         
-        project_data = {"skill_name": skill_name,
-                        "skill_domain": skill_domain
-                        }
+        project_data = {
+            "skill_name": skill_name,
+            "skill_domain": skill_domain
+        }
         
         requests.post(f"{SKILLS_LIST_MICRO_APP_URL}/add-skill", json=project_data)
-        return redirect(url_for('home'))
-    return render_template('add_new_skill_form.html')
+        return redirect(url_for('add_skills'))
+    return render_template('add_new_skill_form.html', login_flag=login_flag)
 
 
 @app.route('/choose-skills', methods=['GET', 'POST'])
 def choose_skills():
+    login_flag = True
+    if session.get("token"):
+        login_flag = False
+    else:
+        return redirect(url_for('login'))
+    user_data = jwt.decode(session['token'], JWT_TOKEN_SECRET, algorithms=["HS256"])
+    all_skills = requests.get(f"{SKILLS_LIST_MICRO_APP_URL}/get-skills")
+    skills = requests.get(f"{CHOOSE_SKILLS_MICRO_APP_URL}/get-skills/{user_data['user_id']}")
     if request.method == 'POST':
-        user_data = jwt.decode(session['token'], JWT_TOKEN_SECRET, algorithms=["HS256"])
         project_data = {
             "skill_name": request.form['skill_name'],
             "skill_domain": request.form['skill_domain'],
             "skill_level": request.form['skill_level'],
-            "yoe": request.form['yoe']
+            "yoe": request.form['yoe'],
+            "user_id": user_data["user_id"]
         }
-    requests.post(f"{CHOOSE_SKILLS_MICRO_APP_URL}/choose-skills/{user_data['user_id']}", json=project_data)
-    return render_template('choose_skills.html')
+
+        requests.post(f"{CHOOSE_SKILLS_MICRO_APP_URL}/choose-skills", json=project_data)
+        return redirect(url_for('choose_skills'))
+
+    return render_template('choose_skills.html', all_skills=all_skills.json()["skills"], skills=skills.json()["skills"], login_flag=login_flag)
+
+
+@app.route('/update-skill/<skill_id>')
+def update_skill(skill_id):
+    yoe = request.args.get('y')
+    skill_level = request.args.get('l')
+    skill_data = {
+        "skill_level": skill_level,
+        "yoe": yoe
+    }
+
+    requests.put(f"{CHOOSE_SKILLS_MICRO_APP_URL}/update-skill/{skill_id}", json=skill_data)
+    return redirect(url_for('choose_skills'))
+
+
+@app.route('/delete-skill/<skill_id>')
+def delete_skill(skill_id):
+    requests.delete(f"{CHOOSE_SKILLS_MICRO_APP_URL}/delete-skill/{skill_id}")
+    return redirect(url_for('choose_skills'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    login_flag = True
+    if session.get("token"):
+        login_flag = False
     password_flag = False
     if request.method == 'POST':
         user_name = request.form['user_name']
@@ -81,11 +121,12 @@ def register():
         session['token'] = jwt_token['token']
 
         return redirect(url_for('home'))
-    return render_template('register.html')
+    return render_template('register.html', login_flag=login_flag)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    login_flag = True
     if session.get("token"):
         return redirect(url_for('home'))
     flag = False
@@ -98,14 +139,17 @@ def login():
         jwt_token = requests.post(f"{CHOOSE_SKILLS_MICRO_APP_URL}/login", json=user_data)
         if jwt_token.status_code != 401:
             session['token'] = jwt_token.json()['token']
-        return redirect(url_for('home'))
-    return render_template('login.html', flag=flag)
+            return redirect(url_for('home'))
+        else:
+            flag = True
+    return render_template('login.html', flag=flag, login_flag=login_flag)
 
 
 @app.route("/logout")
 def logout():
     session.pop('token', None)
     return redirect(url_for("home"))
+
 
 if __name__ == '__main__':
     app.run(port=5003, debug=True)

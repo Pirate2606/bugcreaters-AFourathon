@@ -6,6 +6,56 @@
 {% endblock %}
     
 {% block content %}
+
+    <header>
+        <nav style="background-color: #1d1919" class="navbar navbar-expand-lg navbar-dark mb-5">
+            <a style="font-size: 30px" class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/site_logo.png') }}" width="70" height="70" alt="">
+                PM
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse ml-5" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a style="font-size: 20px;" class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a style="font-size: 20px;" class="nav-link" href="{{ url_for('add_skills') }}">
+                            Create Skill
+                        </a>
+                    </li>
+                </ul>
+                {% if login_flag %}
+                <div class="form-inline my-2 my-lg-0">
+                    <a style="font-size: 20px; color: grey;" class="nav-link" href="{{ url_for('login') }}">
+                        SignIn
+                    </a>
+                </div>
+                <div class="form-inline my-2 my-lg-0 mr-4">
+                    <a style="font-size: 20px; color: grey;" class="nav-link" href="{{ url_for('register') }}">
+                        SignUp
+                    </a>
+                </div>
+                {% else %}
+                <div class="form-inline my-2 my-lg-0">
+                    <a style="font-size: 20px; color: grey;" class="nav-link" href="{{ url_for('choose_skills') }}">
+                        Add Skills
+                    </a>
+                </div>
+                <div class="form-inline my-2 my-lg-0 mr-4">
+                    <a style="font-size: 20px; color: grey;" class="nav-link" href="{{ url_for('logout') }}">
+                        Logout
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
     <div class="container register">
         <div class="row">
             <div class="col-md-3 register-left pt-lg-5 mt-lg-5">
@@ -50,7 +100,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <input type="submit" class="btnRegister" value="Add" />
+                                    <input type="submit" class="btnRegister" value="Create" />
                                 </div>
                             </div>
                         </form>

@@ -8,6 +8,10 @@ services:
         build: ./choose-skills-micro-app/
         ports: 
             - 5005:5005
+    skills-report-micro-app:
+        build: ./skills-report-micro-app/
+        ports: 
+            - 5006:5006
     web:
         build: ./
         ports:

@@ -4,13 +4,16 @@ from config import Config
 import requests
 import uuid
 import jwt
+import json
 
 app.config.from_object(Config)
 db.init_app(app)
 SKILLS_LIST_MICRO_APP_URL = 'http://127.0.0.1:5004'
 CHOOSE_SKILLS_MICRO_APP_URL = 'http://127.0.0.1:5005'
+SKILLS_REPORT_MICRO_APP_URL = 'http://127.0.0.1:5006'
 # SKILLS_LIST_MICRO_APP_URL = 'http://skills-list-micro-app:5004'
 # CHOOSE_SKILLS_MICRO_APP_URL = 'http://choose-skills-micro-app:5005'
+# SKILLS_REPORT_MICRO_APP_URL = 'http://skills-report-micro-app:5006'
 JWT_TOKEN_SECRET = "superSecret"
 
 
@@ -25,6 +28,24 @@ def home():
     login_flag = True
     if session.get("token"):
         login_flag = False
+    
+    all_skills = requests.get(f"{SKILLS_LIST_MICRO_APP_URL}/get-skills")
+    return render_template('home.html', login_flag=login_flag, all_skills=all_skills.json()["skills"])
+
+
+@app.route('/filter-skills', methods=['GET', 'POST'])
+def filter_skills():
+    login_flag = True
+    if session.get("token"):
+        login_flag = False
+
+    if request.method == 'POST':
+        skills = request.get_json()
+        skill_data = {"skills": skills}
+        response = requests.get(f"{SKILLS_REPORT_MICRO_APP_URL}/filter-skills", json=skill_data)
+        
+        return {"users": response.json()["users"], "selected_skills": skills}
+    
     return render_template('home.html', login_flag=login_flag)
 
 

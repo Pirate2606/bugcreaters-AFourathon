@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block head %}
-<title>Skills</title>
+<title>Home</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/project_form.css') }}" />
+
 {% endblock %}
 
 {% block content %}
@@ -55,5 +57,137 @@
             </div>
         </nav>
     </header>
+
+    <div class="container">
+        <h2>Filter Skills</h2>
+        <hr>
+        <div class="row">
+            <div class="input-group mb-3 col-5">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="skill_domain_form">Domain</label>
+                </div>
+                <select class="custom-select" name="skill_domain" onchange="fillSkills()" id="skill_domain_form" required>
+                    <option selected>Select...</option>
+                    <option value="Leadership">Leadership</option>
+                    <option value="Business">Business</option>
+                    <option value="Tech">Tech</option>
+                </select>
+            </div>
+            <div class="input-group mb-3 col-5">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="skill_name_form">Skill &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                </div>
+                <select class="custom-select" name="skill_name" id="skill_name_form" required>
+                    <option selected>Select...</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-md btn-info" onclick="addSkill()">Add</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row" id="selected-div" style="display: none;">
+            <div class="col-1">
+                <h5>Selected: </h5>
+            </div>
+            <div class="col-9 selected-badge">
+                {% for skill in selected_skills %}
+                    <span class="badge badge-pill badge-primary ml-1">{{ skill }}</span>
+                {% endfor %}
+            </div>
+            <div class="col-2">
+                <button class="btn btn-md btn-success" onclick="submitSkills()">Filter</button>
+                <a class="btn btn-md btn-warning" href="{{ url_for('home') }}">Clear</a>
+            </div>
+        </div>
+
+        <div class="row mt-3" id="table-row" style="display: none;">
+            <hr>
+            <h3>Users</h3>
+            <table class="table table shadow bg-white rounded table-hover">
+                <thead style="background-color: #e1e5ea;">
+                    <tr class="py-3">
+                        <th class="py-3" scope="col">#</th>
+                        <th class="py-3 d-none d-lg-table-cell" scope="col">Username</th>
+                        <th class="py-3 d-none d-lg-table-cell" scope="col">Full Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function fillSkills() {
+            var all_skills = {{ all_skills|tojson }};
+            var selected_domain = document.getElementById("skill_domain_form").value;
+            document.getElementById("skill_name_form").innerHTML = "<option selected>Select...</option>";
+            for (var i = 0; i < all_skills.length; i++) {
+                if (all_skills[i].skill_domain == selected_domain) {
+                    document.getElementById("skill_name_form").innerHTML += "<option value='" + all_skills[i].skill_name + "'>" + all_skills[i].skill_name + "</option>";
+                }
+            }
+        }
+
+        function addSkill() {
+            var selected_div = document.getElementById("selected-div").style.display = "flex";
+            var selected_skill = document.getElementById("skill_name_form").value;
+            var skill = selected_skill;
+            var badge = document.createElement("span");
+            badge.setAttribute("class", "badge badge-pill badge-primary ml-1");
+            badge.innerHTML = skill;
+            document.getElementsByClassName("selected-badge")[0].appendChild(badge);
+            fillSkills();
+        }
+
+        async function submitSkills() {
+            var selected_skills = document.getElementsByClassName("selected-badge")[0].children;
+            var skills = [];
+            for (var i = 0; i < selected_skills.length; i++) {
+                skills.push(selected_skills[i].innerHTML);
+            }
+            var skills_json = JSON.stringify(skills);
+            fetch("/filter-skills", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: skills_json
+            }).then(response =>
+                response.json().then(data => ({
+                    data: data,
+                    status: response.status
+                })
+                ).then(res => {
+                    document.getElementsByTagName("tbody")[0].innerHTML = "";
+                    var skills = res.data.selected_skills;
+                    var users = res.data.users;
+                    for (var i = 0; i < users.length; i++) {
+                        var user = users[i];
+                        var row = document.createElement("tr");
+                        var index = document.createElement("th");
+                        index.setAttribute("scope", "row");
+                        index.innerHTML = i + 1;
+                        var username = document.createElement("td");
+                        username.innerHTML = user.user_name;
+                        var fullname = document.createElement("td");
+                        fullname.innerHTML = user.full_name;
+                        row.appendChild(index);
+                        row.appendChild(username);
+                        row.appendChild(fullname);
+                        document.getElementsByTagName("tbody")[0].appendChild(row);
+                    }
+                    var download = document.createElement("a");
+                    var table = document.getElementById("table-row")
+                    download.setAttribute("href", "{{ url_for('download_users') }}");
+                    download.setAttribute("class", "btn btn-sm btn-outline-success");
+                    download.innerHTML = "Download";
+                    table.appendChild(download);
+                    table.style.display = "block";
+                }));
+            
+        }
+    </script>
 
 {% endblock %}

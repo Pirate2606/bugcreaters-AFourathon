@@ -82,11 +82,11 @@
                 </select>
             </div>
             <div class="col-2">
-                <button class="btn btn-md btn-outline-success" onclick="addSkill()">Add</button>
+                <button class="btn btn-md btn-info" onclick="addSkill()">Add</button>
             </div>
         </div>
         <hr>
-        <div class="row">
+        <div class="row" id="selected-div" style="display: none;">
             <div class="col-1">
                 <h5>Selected: </h5>
             </div>
@@ -96,12 +96,14 @@
                 {% endfor %}
             </div>
             <div class="col-2">
-                <button class="btn btn-sm btn-outline-success" onclick="submitSkills()">Filter</button>
-                <a class="btn btn-sm btn-outline-warning" href="{{ url_for('home') }}">Clear</a>
+                <button class="btn btn-md btn-success" onclick="submitSkills()">Filter</button>
+                <a class="btn btn-md btn-warning" href="{{ url_for('home') }}">Clear</a>
             </div>
         </div>
-        <hr>
-        <div class="row">
+
+        <div class="row mt-3" id="table-row" style="display: none;">
+            <hr>
+            <h3>Users</h3>
             <table class="table table shadow bg-white rounded table-hover">
                 <thead style="background-color: #e1e5ea;">
                     <tr class="py-3">
@@ -129,6 +131,7 @@
         }
 
         function addSkill() {
+            var selected_div = document.getElementById("selected-div").style.display = "flex";
             var selected_skill = document.getElementById("skill_name_form").value;
             var skill = selected_skill;
             var badge = document.createElement("span");
@@ -175,7 +178,13 @@
                         row.appendChild(fullname);
                         document.getElementsByTagName("tbody")[0].appendChild(row);
                     }
-                    
+                    var download = document.createElement("a");
+                    var table = document.getElementById("table-row")
+                    download.setAttribute("href", "{{ url_for('download_users') }}");
+                    download.setAttribute("class", "btn btn-sm btn-outline-success");
+                    download.innerHTML = "Download";
+                    table.appendChild(download);
+                    table.style.display = "block";
                 }));
             
         }

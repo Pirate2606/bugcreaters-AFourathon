@@ -1,19 +1,20 @@
-from flask import render_template, request, redirect, url_for, session
+import os
+from flask import render_template, request, redirect, url_for, session, send_file
 from models import app, db
 from config import Config
 import requests
 import uuid
 import jwt
-import json
+
 
 app.config.from_object(Config)
 db.init_app(app)
-SKILLS_LIST_MICRO_APP_URL = 'http://127.0.0.1:5004'
-CHOOSE_SKILLS_MICRO_APP_URL = 'http://127.0.0.1:5005'
-SKILLS_REPORT_MICRO_APP_URL = 'http://127.0.0.1:5006'
-# SKILLS_LIST_MICRO_APP_URL = 'http://skills-list-micro-app:5004'
-# CHOOSE_SKILLS_MICRO_APP_URL = 'http://choose-skills-micro-app:5005'
-# SKILLS_REPORT_MICRO_APP_URL = 'http://skills-report-micro-app:5006'
+# SKILLS_LIST_MICRO_APP_URL = 'http://127.0.0.1:5004'
+# CHOOSE_SKILLS_MICRO_APP_URL = 'http://127.0.0.1:5005'
+# SKILLS_REPORT_MICRO_APP_URL = 'http://127.0.0.1:5006'
+SKILLS_LIST_MICRO_APP_URL = 'http://skills-list-micro-app:5004'
+CHOOSE_SKILLS_MICRO_APP_URL = 'http://choose-skills-micro-app:5005'
+SKILLS_REPORT_MICRO_APP_URL = 'http://skills-report-micro-app:5006'
 JWT_TOKEN_SECRET = "superSecret"
 
 
@@ -47,6 +48,14 @@ def filter_skills():
         return {"users": response.json()["users"], "selected_skills": skills}
     
     return render_template('home.html', login_flag=login_flag)
+
+
+@app.route('/download-users', methods=['GET', 'POST'])
+def download_users():
+    requests.get(f"{SKILLS_REPORT_MICRO_APP_URL}/get-file")
+    parent_path = os.path.join(os.path.join(os.getcwd(), app.config['PARENT_FOLDER']), "static")
+    path = os.path.join(parent_path, "users.xlsx")
+    return send_file(path, as_attachment=True)
 
 
 @app.route('/add-skills', methods=['GET', 'POST'])

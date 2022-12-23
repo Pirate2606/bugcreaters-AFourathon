@@ -64,7 +64,6 @@
         <table class="table table shadow bg-white rounded table-hover">
             <thead style="background-color: #e1e5ea;">
                 <tr class="py-3">
-                    <th class="py-3" scope="col">#</th>
                     <th class="py-3 d-none d-lg-table-cell" scope="col">Domain*</th>
                     <th class="py-3 d-none d-lg-table-cell" scope="col">Skill*</th>
                     <th class="py-3 d-none d-lg-table-cell" scope="col">Skill Level*</th>
@@ -73,47 +72,46 @@
                 </tr>
             </thead>
             <tbody>
-                        <form method="post">
-                            <tr class='clickable-row mt-5' style="cursor: default;">
-                                <th class="py-3" scope="row">1</th>
-                                <td class="pb-2 pt-3 d-none d-lg-table-cell">
-                                    <div class="input-group mb-3">
-                                        <select class="custom-select" name="skill_domain" onchange="fillSkills()" id="skill_domain_form" required>
-                                            <option selected>Select...</option>
-                                            <option value="Leadership">Leadership</option>
-                                            <option value="Business">Business</option>
-                                            <option value="Tech">Tech</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td class="pb-2 pt-3 d-none d-lg-table-cell">
-                                    <div class="input-group mb-3">
-                                        <select class="custom-select" name="skill_name" id="skill_name_form" required>
-                                            <option selected>Select...</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td class="pb-2 pt-3 d-none d-lg-table-cell">
-                                    <div class="input-group mb-3">
-                                        <select class="custom-select" name="skill_level" required>
-                                            <option selected>Select...</option>
-                                            <option value="Basic">Basic</option>
-                                            <option value="Intermediate">Intermediate</option>
-                                            <option value="Expert">Expert</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td class="pb-2 pt-3">
-                                    <div class="input-group input-group mb-3">
-                                        <input name="yoe" type="number" class="form-control" placeholder="YOE" aria-describedby="basic-addon1"
-                                            required />
-                                    </div>
-                                </td>
-                                <td class="pb-2 pt-3 d-none d-lg-table-cell">
-                                    <button class="btn btn-md btn-outline-success" type="submit">Add</button>
-                                </td>
-                            </tr>
-                        </form>
+                <form method="post">
+                    <tr class='clickable-row mt-5' style="cursor: default;">
+                        <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                            <div class="input-group mb-3">
+                                <select class="custom-select" name="skill_domain" onchange="fillSkills()" id="skill_domain_form" required>
+                                    <option selected>Select...</option>
+                                    <option value="Leadership">Leadership</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Tech">Tech</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                            <div class="input-group mb-3">
+                                <select class="custom-select" name="skill_name" id="skill_name_form" required>
+                                    <option selected>Select...</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                            <div class="input-group mb-3">
+                                <select class="custom-select" name="skill_level" required>
+                                    <option selected>Select...</option>
+                                    <option value="Basic">Basic</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Expert">Expert</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td class="pb-2 pt-3">
+                            <div class="input-group input-group mb-3">
+                                <input name="yoe" type="number" class="form-control" placeholder="YOE" aria-describedby="basic-addon1"
+                                    required />
+                            </div>
+                        </td>
+                        <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                            <button class="btn btn-md btn-outline-success" type="submit">Add</button>
+                        </td>
+                    </tr>
+                </form>
             </tbody>
         </table>
 

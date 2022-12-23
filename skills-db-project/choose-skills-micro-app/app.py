@@ -36,7 +36,7 @@ class AddUserSkill(Resource):
 class GetSkills(Resource):
     def get(self, user_id):
         skills = []
-        results = db.engine.execute(f'SELECT * FROM users_skills where user_id = "{user_id}";')
+        results = db.engine.execute(f"SELECT * FROM users_skills where user_id = '{user_id}';")
         for result in results:
             d = dict(result)
             if d["skill_name"] is not None:
@@ -50,8 +50,8 @@ class UpdateSkill(Resource):
         db.engine.execute(
             f'''
             UPDATE users_skills
-            SET skill_level = "{data['skill_level']}", yoe = "{data['yoe']}"
-            WHERE id = "{skill_id}";
+            SET skill_level = '{data['skill_level']}', yoe = '{data['yoe']}'
+            WHERE id = '{skill_id}';
             '''
         )
         
@@ -60,7 +60,7 @@ class UpdateSkill(Resource):
 
 class DeleteSkill(Resource):
     def delete(self, skill_id):
-        db.engine.execute(f'DELETE FROM users_skills WHERE id = "{skill_id}";')
+        db.engine.execute(f"DELETE FROM users_skills WHERE id = '{skill_id}';")
         return {"message": "Skill deleted successfully"}, 200
 
 
@@ -72,10 +72,10 @@ class Register(Resource):
             INSERT INTO users (
                 user_id, full_name, user_name, password)
             VALUES (
-                "{payload['user_id']}",
-                "{payload['full_name']}",
-                "{payload['user_name']}",
-                "{generate_password_hash(payload['password'])}"
+                '{payload['user_id']}',
+                '{payload['full_name']}',
+                '{payload['user_name']}',
+                '{generate_password_hash(payload['password'])}'
             );
             '''
         )
@@ -88,7 +88,7 @@ class Login(Resource):
         payload = request.get_json()
         users = db.engine.execute(
             f'''
-            SELECT * FROM users WHERE user_name = "{payload['user_name']}";
+            SELECT * FROM users WHERE user_name = '{payload['user_name']}';
             '''
         )
         for user in users:

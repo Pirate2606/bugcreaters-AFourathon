@@ -10,7 +10,7 @@ body {
 /* REGISTRATION FORM STARTS */
 
 .register {
-    background: -webkit-linear-gradient(left, #f8913e, #ffc77e);
+    background: -webkit-linear-gradient(left, #212529, rgb(124, 123, 123));
     margin-top: 3%;
     margin-bottom: 3%;
     padding: 3%;
@@ -87,7 +87,7 @@ body {
     outline: none;
     border-radius: 1.5rem;
     padding: 2%;
-    background: #ff9b61;
+    background: #212529;
     color: #fff;
     font-weight: 600;
     width: 40%;
@@ -97,7 +97,7 @@ body {
 }
 
 .btnRegisterCancel:hover {
-    background: #fd8f4f;
+    background: #2c3035;
     color: #fff;
 }
 
@@ -108,7 +108,7 @@ body {
     outline: none;
     border-radius: 1.5rem;
     padding: 2%;
-    background: #ff9b61;
+    background: #212529;
     color: #fff;
     font-weight: 600;
     width: 40%;
@@ -117,7 +117,7 @@ body {
 }
 
 .btnRegister:hover {
-    background: #fd8f4f;
+    background: #2c3035;
 }
 
 .register .nav-tabs {

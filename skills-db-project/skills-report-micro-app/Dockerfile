@@ -7,5 +7,6 @@ WORKDIR /app
 RUN pip3 install -r requirements.txt
 
 EXPOSE 5006
+ENV PORT 5006
 
 CMD exec gunicorn --bind :$PORT --workers 4 --threads 12 --timeout 0 app:app

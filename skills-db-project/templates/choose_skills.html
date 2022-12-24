@@ -77,7 +77,7 @@
                         <td class="pb-2 pt-3 d-none d-lg-table-cell">
                             <div class="input-group mb-3">
                                 <select class="custom-select" name="skill_domain" onchange="fillSkills()" id="skill_domain_form" required>
-                                    <option selected>Select...</option>
+                                    <option selected="selected" disabled="disabled" value="">Select...</option>
                                     <option value="Leadership">Leadership</option>
                                     <option value="Business">Business</option>
                                     <option value="Tech">Tech</option>
@@ -87,14 +87,14 @@
                         <td class="pb-2 pt-3 d-none d-lg-table-cell">
                             <div class="input-group mb-3">
                                 <select class="custom-select" name="skill_name" id="skill_name_form" required>
-                                    <option selected>Select...</option>
+                                    <option selected="selected" disabled="disabled" value="">Select...</option>
                                 </select>
                             </div>
                         </td>
                         <td class="pb-2 pt-3 d-none d-lg-table-cell">
                             <div class="input-group mb-3">
                                 <select class="custom-select" name="skill_level" required>
-                                    <option selected>Select...</option>
+                                    <option selected="selected" disabled="disabled" value="">Select...</option>
                                     <option value="Basic">Basic</option>
                                     <option value="Intermediate">Intermediate</option>
                                     <option value="Expert">Expert</option>
@@ -185,10 +185,15 @@
 <script>
     function fillSkills() {
         var all_skills = {{ all_skills|tojson }};
+        var selected_skills = {{ skills|safe }};
+        var skills = [];
+        for (var i = 0; i < selected_skills.length; i++) {
+            skills.push(selected_skills[i].skill_name);
+        }
         var selected_domain = document.getElementById("skill_domain_form").value;
-        document.getElementById("skill_name_form").innerHTML = "<option selected>Select...</option>";
+        document.getElementById("skill_name_form").innerHTML = '<option selected="selected" disabled="disabled" value="">Select...</option>';
         for (var i = 0; i < all_skills.length; i++) {
-            if (all_skills[i].skill_domain == selected_domain) {
+            if (all_skills[i].skill_domain == selected_domain && !skills.includes(all_skills[i].skill_name)) {
                 document.getElementById("skill_name_form").innerHTML += "<option value='" + all_skills[i].skill_name + "'>" + all_skills[i].skill_name + "</option>";
             }
         }

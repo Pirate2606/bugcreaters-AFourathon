@@ -66,8 +66,8 @@
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="skill_domain_form">Domain</label>
                 </div>
-                <select class="custom-select" name="skill_domain" onchange="fillSkills()" id="skill_domain_form" required>
-                    <option selected>Select...</option>
+                <select class="custom-select" name="skill_domain" onchange="fillSkills([])" id="skill_domain_form" required>
+                    <option selected="selected" disabled="disabled" value="">Select...</option>
                     <option value="Leadership">Leadership</option>
                     <option value="Business">Business</option>
                     <option value="Tech">Tech</option>
@@ -78,7 +78,7 @@
                     <label class="input-group-text" for="skill_name_form">Skill &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                 </div>
                 <select class="custom-select" name="skill_name" id="skill_name_form" required>
-                    <option selected>Select...</option>
+                    <option selected="selected" disabled="disabled" value="">Select...</option>
                 </select>
             </div>
             <div class="col-2">
@@ -119,12 +119,12 @@
     </div>
 
     <script>
-        function fillSkills() {
+        function fillSkills(already_selected_skills) {
             var all_skills = {{ all_skills|tojson }};
             var selected_domain = document.getElementById("skill_domain_form").value;
-            document.getElementById("skill_name_form").innerHTML = "<option selected>Select...</option>";
+            document.getElementById("skill_name_form").innerHTML = '<option selected="selected" disabled="disabled" value="">Select...</option>';
             for (var i = 0; i < all_skills.length; i++) {
-                if (all_skills[i].skill_domain == selected_domain) {
+                if (all_skills[i].skill_domain == selected_domain && !already_selected_skills.includes(all_skills[i].skill_name)) {
                     document.getElementById("skill_name_form").innerHTML += "<option value='" + all_skills[i].skill_name + "'>" + all_skills[i].skill_name + "</option>";
                 }
             }
@@ -135,10 +135,16 @@
             var selected_skill = document.getElementById("skill_name_form").value;
             var skill = selected_skill;
             var badge = document.createElement("span");
-            badge.setAttribute("class", "badge badge-pill badge-primary ml-1");
+            badge.setAttribute("class", "skill-name-badge badge badge-pill badge-primary ml-1");
             badge.innerHTML = skill;
             document.getElementsByClassName("selected-badge")[0].appendChild(badge);
-            fillSkills();
+            
+            var skills = document.getElementsByClassName("skill-name-badge");
+            var already_selected_skills = [];
+            for (var i = 0; i < skills.length; i++) {
+                already_selected_skills.push(skills[i].innerHTML);
+            }
+            fillSkills(already_selected_skills);
         }
 
         async function submitSkills() {

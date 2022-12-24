@@ -17,12 +17,15 @@ JWT_TOKEN_SECRET = "superSecret"
 class AddUserSkill(Resource):
     def post(self):
         project_data = request.get_json()
+        header = request.headers.get("Authorization")
+        token = header.split(" ")[1]
+        user = jwt.decode(token, JWT_TOKEN_SECRET, algorithms=["HS256"])
         db.engine.execute(
             f'''
             INSERT INTO users_skills (
                 user_id, skill_name, skill_domain, skill_level, yoe) 
             VALUES (
-                '{project_data['user_id']}',
+                '{user['user_id']}',
                 '{project_data['skill_name']}',
                 '{project_data['skill_domain']}',
                 '{project_data['skill_level']}',

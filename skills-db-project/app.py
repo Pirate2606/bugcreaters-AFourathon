@@ -90,15 +90,15 @@ def choose_skills():
     all_skills = requests.get(f"{SKILLS_LIST_MICRO_APP_URL}/get-skills")
     skills = requests.get(f"{CHOOSE_SKILLS_MICRO_APP_URL}/get-skills/{user_data['user_id']}")
     if request.method == 'POST':
+        header = {'Authorization': 'Bearer ' + session['token']}
         project_data = {
             "skill_name": request.form['skill_name'],
             "skill_domain": request.form['skill_domain'],
             "skill_level": request.form['skill_level'],
-            "yoe": request.form['yoe'],
-            "user_id": user_data["user_id"]
+            "yoe": request.form['yoe']
         }
 
-        requests.post(f"{CHOOSE_SKILLS_MICRO_APP_URL}/choose-skills", json=project_data)
+        requests.post(f"{CHOOSE_SKILLS_MICRO_APP_URL}/choose-skills", json=project_data, headers=header)
         return redirect(url_for('choose_skills'))
 
     return render_template('choose_skills.html', all_skills=all_skills.json()["skills"], skills=skills.json()["skills"], login_flag=login_flag)

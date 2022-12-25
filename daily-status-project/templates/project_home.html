@@ -51,6 +51,7 @@
                         <th class="py-3 d-none d-lg-table-cell" scope="col">Details</th>
                         <th class="py-3 d-none d-lg-table-cell" scope="col">Update</th>
                         <th class="py-3 d-none d-lg-table-cell" scope="col">Delete</th>
+                        <th class="py-3 d-none d-lg-table-cell" scope="col">Team</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,6 +123,10 @@
                         <td class="pb-2 pt-3 d-none d-lg-table-cell"> 
                             <a href="{{ url_for('delete_project', project_id=project.project_id) }}"
                                class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                        <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                            <a href="{{ url_for('add_team', project_id=project.project_id) }}"
+                                class="btn btn-sm btn-outline-info">Team</a>
                         </td>
                     </tr>
                     {% endfor %}

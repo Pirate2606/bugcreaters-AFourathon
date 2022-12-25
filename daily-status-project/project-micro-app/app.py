@@ -40,6 +40,21 @@ class RegisterProject(Resource):
         return {"message": "Project registered successfully"}, 200
 
 
+class GetProjects(Resource):
+    def get(self):
+        projects = db.engine.execute(f"SELECT * FROM project_details")
+        all_projects = [dict(project) for project in projects]
+        return {"projects": all_projects}, 200
+
+
+class GetProjectDetails(Resource):
+    def get(self, project_id):
+        project_details = db.engine.execute(f"SELECT * FROM project_details WHERE project_id = '{project_id}'")
+        projects = [dict(project) for project in project_details]
+        return {"projects": projects}, 200
+
+
+
 class DeleteProject(Resource):
     def delete(self, project_id):
         db.engine.execute(f"DELETE FROM project_details WHERE project_id = '{project_id}'")
@@ -76,6 +91,8 @@ class UpdateProject(Resource):
 api.add_resource(RegisterProject, '/register-project')
 api.add_resource(DeleteProject, '/delete-project/<project_id>')
 api.add_resource(UpdateProject, '/edit-project/<project_id>')
+api.add_resource(GetProjectDetails, '/get-project/<project_id>')
+api.add_resource(GetProjects, '/get-projects')
 
 
 if __name__ == '__main__':

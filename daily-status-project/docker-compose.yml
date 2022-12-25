@@ -1,9 +1,17 @@
 version: '3'
 services:
+    project-micro-app:
+        build: ./project-micro-app/
+        ports: 
+            - 5008:5008
+    team-micro-app:
+        build: ./team-micro-app/
+        ports: 
+            - 5009:5009
     web:
         build: ./
         ports:
-            - "5007:5007"
+            - 5007:5007
         links:
             - db
     db:

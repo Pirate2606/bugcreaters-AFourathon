@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>All Projects</title>
+{% endblock %}
+
+{% block content %}
+
+<header>
+    <nav style="background-color: #1d1919" class="navbar navbar-expand-lg navbar-dark mb-5">
+        <a style="font-size: 30px" class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='images/site_logo.png') }}" width="70" height="70" alt="">
+            PM
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse ml-5" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a style="font-size: 20px;" class="nav-link" href="{{ url_for('project_home') }}">Home <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a style="font-size: 20px;" class="nav-link" href="{{ url_for('register_project') }}">
+                        Add Project
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+<main role="main" class="container mb-2">
+    <section class="pt-2">
+        <h2 class="mb-4">Project Name: {{ project_name }}</h2>
+        <hr>
+        <table class="table table shadow bg-white rounded table-hover">
+            <thead style="background-color: #e1e5ea;">
+                <tr class="py-3">
+                    <th class="py-3" scope="col">#</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Team Name</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Start Date</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">End Date</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Team Lead</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Details</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Update</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in all_teams %}
+                <div class="modal fade" id="exampleModal{{ loop.index|string }}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel{{ loop.index|string }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel{{ loop.index|string }}">
+                                    Team Details
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <strong>Team name: </strong>
+                                <p>
+                                    {{ team.team_name }}
+                                </p>
+                                <hr>
+                                <strong>Team Lead email: </strong>
+                                <p>
+                                    {{ team.team_lead_email }}
+                                </p>
+                                <hr>
+                                <strong>Team members: </strong>
+                                <p>
+                                    {% for p in team.team_members.split(',') %}
+                                    <b>{{ loop.index }}.</b> {{ p }} <br>
+                                    {% endfor %}
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <tr class='clickable-row' style="cursor: default;">
+                    <th class="py-3" scope="row">{{ loop.index }}</th>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        {{ team.team_name }}
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        {{ team.team_start_date.strftime('%d %b, %Y') }}
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        {{ team.team_end_date.strftime('%d %b, %Y') }}
+                    </td>
+                    <td class="pb-2 pt-3">
+                        {{ team.team_lead_name }}
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <button class="btn btn-sm btn-outline-primary" style="text-decoration: none; cursor: pointer;"
+                            data-toggle="modal" data-target="#exampleModal{{ loop.index|string }}">
+                            Details
+                        </button>
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <a href="{{ url_for('edit_team', project_id=project_id, team_id=team.team_id) }}"
+                            class="btn btn-sm btn-outline-success">Update</a>
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <a href="{{ url_for('delete_team', project_id=project_id, team_id=team.team_id) }}"
+                            class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="row">
+            <div class="col-12">
+                <a href="{{ url_for('add_team', project_id=project_id, t=true) }}" class="btn btn-primary">Add Team</a>
+            </div>
+    </section>
+</main>
+
+{% endblock %}

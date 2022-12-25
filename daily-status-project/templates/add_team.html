@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Team Details</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/project_form.css') }}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="container register">
+    <div class="row">
+        <div class="col-md-3 register-left pt-lg-5 mt-lg-5">
+            <i class="fa-solid fa-5x fa-diagram-project"></i>
+            <br>
+            <h3 style="padding-top: 30px;">Teams Portal</h3>
+            <p style="font-weight: 400;">Please make your team here!</p>
+        </div>
+        {% if edit %}
+        <div class="col-md-9 register-right">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <h3 class="register-heading">
+                        Update Team
+                    </h3>
+                    <form method="POST" , enctype="multipart/form-data">
+                        <div class="row register-form">
+                            <div class="col-md-6">
+                                <label>Team name</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Team Name *" value="{{ team.team_name }}" name="team_name"
+                                        required />
+                                </div>
+                                <div class="form-group">
+                                    <label>Start date</label>
+                                    <input type="text" value="{{ team.team_start_date }}" class="form-control" placeholder="Start Date *" name="team_start_date"
+                                        required onfocus="(this.type='date')" onblur="if(!this.value)this.type='text'" />
+                                </div>
+                                <div class="form-group">
+                                    <label>End date</label>
+                                    <input type="text" value="{{ team.team_end_date }}" class="form-control" placeholder="End Date *" value=""
+                                        name="team_end_date" required onfocus="(this.type='date')"
+                                        onblur="if(!this.value)this.type='text'" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Team lead name</label>
+                                    <input type="text" value="{{ team.team_lead_name }}" class="form-control" placeholder="Team Lead Name *" name="team_lead_name"
+                                        required />
+                                </div>
+                                <div class="form-group">
+                                    <label>Team lead email</label>
+                                    <input type="email" value="{{ team.team_lead_email }}" class="form-control" placeholder="Tean Lead Email *"
+                                        name="team_lead_email" required />
+                                </div>
+                                <div class="form-group files">
+                                    <label for="email_list">Team Members *</label>
+                                    <textarea style="height: 100px" class="form-control" name="team_members"
+                                        placeholder="Enter names seperated by comma" required>{{ team.team_members }}</textarea>
+                                </div>
+                                <input type="submit" class="btnRegister" value="Update" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab"></div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-md-9 register-right">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <h3 class="register-heading">
+                        Add Team
+                    </h3>
+                    <form method="POST" , enctype="multipart/form-data">
+                        <div class="row register-form">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Team Name *" value=""
+                                        name="team_name" required />
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Start Date *"
+                                        name="team_start_date" required onfocus="(this.type='date')"
+                                        onblur="if(!this.value)this.type='text'" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="End Date *" value=""
+                                        name="team_end_date" required onfocus="(this.type='date')"
+                                        onblur="if(!this.value)this.type='text'" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Team Lead Name *"
+                                        name="team_lead_name" required />
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Tean Lead Email *"
+                                        name="team_lead_email" required />
+                                </div>
+                                <div class="form-group files">
+                                    <label for="email_list">Team Members *</label>
+                                    <textarea style="height: 100px" class="form-control"
+                                        name="team_members" placeholder="Enter names seperated by comma"
+                                        required></textarea>
+                                </div>
+                                <input type="submit" class="btnRegister" value="Add" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab"></div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

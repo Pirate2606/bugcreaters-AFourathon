@@ -31,5 +31,7 @@ class Teams(db.Model):
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(8))
+    full_name = db.Column(db.String(256))
     user_name = db.Column(db.String(256))
     user_email = db.Column(db.String(256))
+    password = db.Column(db.String(256))

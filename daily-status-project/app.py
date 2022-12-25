@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for
-from models import app, db, ProjectDetails
+from models import app, db, ProjectDetails, Users
 from config import Config
 import uuid
 import requests
@@ -102,7 +102,10 @@ def register_project():
         
         requests.post(f"{PROJECT_MICRO_APP_URL}/register-project", json=project_data)
         return redirect(url_for('project_home'))
-    return render_template('project_form.html')
+    users = []
+    for user in Users.query.all():
+        users.append({'user_name': user.user_name, 'user_email': user.user_email})
+    return render_template('project_form.html', users=users)
 
 
 @app.route('/edit-project/<project_id>', methods=['GET', 'POST'])

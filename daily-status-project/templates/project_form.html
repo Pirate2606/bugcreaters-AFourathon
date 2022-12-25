@@ -38,23 +38,31 @@
                                         <input type="text" class="form-control" placeholder="End Date *" value=""
                                             name="project_end_date" required
                                             onfocus="(this.type='date')" 
-                                            onblur="if(!this.value)this.type='text'"
-                                             />
+                                            onblur="if(!this.value)this.type='text'" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Project Manager Name *" name="project_manager_name" required />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Project Manager Name *" 
-                                        name="project_manager_name" required />
-                                    </div>
                                     <div class="form-group">
                                         <input type="email" class="form-control" placeholder="Project Manager Email *" 
                                         name="project_manager_email" required />
                                     </div>
                                     <div class="form-group files">
-                                        <label for="email_list">Mailing List *</label>
-                                        <textarea style="height: 100px" class="form-control" name="project_daily_report_email"
-                                            placeholder="Enter emails seperated by comma" required></textarea>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text" for="user_form">Mailing List *</label>
+                                            </div>
+                                            <select class="custom-select" name="users" onchange="addUser()" id="user_form">
+                                                <option selected="selected" disabled="disabled" value="">Select...</option>
+                                                {% for user in users %}
+                                                <option value="{{ user.user_email }}">{{ user.user_name }}, {{ user.user_email }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <textarea onchange="addUser()" style="height: 100px" class="form-control" name="project_daily_report_email" id="daily_report_email_textarea"
+                                            placeholder="Select users from above dropdown" required></textarea>
                                     </div>
                                     <input type="submit" class="btnRegister" value="Register" />
                                 </div>
@@ -66,5 +74,37 @@
             </div>
         </div>
     </div>
+
+<script>
+    function fillUsers(already_selected_users) {
+        var all_users = {{ users|safe }};
+        document.getElementById("user_form").innerHTML = '<option selected="selected" disabled="disabled" value="">Select...</option>';
+        for (var i = 0; i < all_users.length; i++) {
+            if (!already_selected_users.includes(all_users[i].user_name)) {
+                document.getElementById("user_form").innerHTML += "<option value='" + all_users[i].user_email + "'>" + all_users[i].user_name  + ', ' + all_users[i].user_email + "</option>";
+            }
+        }
+    }
+
+    function addUser() {
+        var selected_user = document.getElementById("user_form").value;
+        if (selected_user != '') {
+            var textbox = document.getElementById("daily_report_email_textarea");
+            if (textbox.value == '')
+                textbox.innerHTML = selected_user;
+            else
+                textbox.innerHTML = textbox.innerHTML + ',' + selected_user;
+        }
+
+        var users = document.getElementById("daily_report_email_textarea").value.split(',');
+        var already_selected_users = [];
+        for (var i = 0; i < users.length; i++) {
+            already_selected_users.push(users[i]);
+        }
+        fillUsers(already_selected_users);
+    }
+
+
+</script>
 
 {% endblock %}

@@ -26,3 +26,10 @@ class Teams(db.Model):
     team_lead_name = db.Column(db.String(256))
     team_lead_email = db.Column(db.String(256))
     team_members = db.Column(db.String(256))
+
+
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(8))
+    user_name = db.Column(db.String(256))
+    user_email = db.Column(db.String(256))

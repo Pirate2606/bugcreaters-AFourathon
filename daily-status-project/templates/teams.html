@@ -29,6 +29,24 @@
                     </a>
                 </li>
             </ul>
+            {% if login_flag %}
+            <div class="form-inline my-2 my-lg-0">
+                <a style="font-size: 20px; color: grey;" class="nav-link" href="{{ url_for('login') }}">
+                    SignIn
+                </a>
+            </div>
+            <div class="form-inline my-2 my-lg-0 mr-4">
+                <a style="font-size: 20px; color: grey;" class="nav-link" href="{{ url_for('register') }}">
+                    SignUp
+                </a>
+            </div>
+            {% else %}
+            <div class="form-inline my-2 my-lg-0 mr-4">
+                <a style="font-size: 20px; color: grey;" class="nav-link" href="{{ url_for('logout') }}">
+                    Logout
+                </a>
+            </div>
+            {% endif %}
         </div>
     </nav>
 </header>

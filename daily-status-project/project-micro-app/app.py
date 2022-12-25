@@ -54,7 +54,6 @@ class GetProjectDetails(Resource):
         return {"projects": projects}, 200
 
 
-
 class DeleteProject(Resource):
     def delete(self, project_id):
         db.engine.execute(f"DELETE FROM project_details WHERE project_id = '{project_id}'")

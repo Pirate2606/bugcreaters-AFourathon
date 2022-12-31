@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Update Status</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/project_form.css') }}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="container register">
+    <div class="row">
+        <div class="col-md-3 register-left pt-lg-5 mt-lg-5">
+            <i class="fa-solid fa-5x fa-diagram-project"></i>
+            <br>
+            <h3 style="padding-top: 30px;">Update Status</h3>
+            <p style="font-weight: 400;">Update status for: "{{ project.project_name }}"</p>
+        </div>
+        <div class="col-md-9 register-right">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <h3 class="register-heading">
+                        Project Name: {{ project.project_name }}
+                    </h3>
+                    <form method="POST" , enctype="multipart/form-data">
+                        <div class="row register-form">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">
+                                                Status
+                                            </label>
+                                        </div>
+                                        <select class="custom-select" name="project_status" id="project_status"
+                                            required>
+                                            <option selected="selected" value="{{ status.project_status }}">{{ status.project_status }}</option>
+                                            <option value="In Progress">In Progress</option>
+                                            <option value="Blocked">Blocked</option>
+                                            <option value="Completed">Completed</option>
+                                            <option value="PTO">PTO</option>
+                                            <option value="In Review">In Review</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">
+                                                Risk
+                                            </label>
+                                        </div>
+                                        <select class="custom-select" name="project_risk" id="project_risk" required>
+                                            <option selected="selected" value="{{ status.project_risk }}">{{ status.project_risk }}</option>
+                                            <option value="Very High">Very High</option>
+                                            <option value="High">High</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Low">Low</option>
+                                            <option value="Very Low">Very Low</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="week_ending_date">Week ending date *</label>
+                                    <input type="text" class="form-control" placeholder="Week ending date *"
+                                        name="week_ending_date" required value="{{ status.week_ending_date }}" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <textarea style="height: 150px" class="form-control" name="project_highlights"
+                                        placeholder="Highlights *" required>{{ status.project_highlights }}</textarea>
+                                </div>
+                                <input type="submit" class="btnRegister" value="Update" />
+                                <a href="{{ url_for('filter_projects') }}"
+                                    style="text-align: center; text-decoration: none;"
+                                    class="btnRegisterCancel">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

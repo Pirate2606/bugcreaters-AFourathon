@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Filter Projects</title>
+{% endblock %}
+
+{% block content %}
+
+<header>
+    <nav style="background-color: #1d1919" class="navbar navbar-expand-lg navbar-dark mb-5">
+        <a style="font-size: 30px" class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='images/site_logo.png') }}" width="70" height="70" alt="">
+            PM
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse ml-5" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a style="font-size: 20px;" class="nav-link" href="{{ url_for('project_home') }}">Home <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a style="font-size: 20px;" class="nav-link" href="{{ url_for('register_project') }}">
+                        Add Project
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a style="font-size: 20px;" class="nav-link" href="{{ url_for('filter_projects') }}">
+                        Project Status
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+<main role="main" class="container mb-2">
+    <section class="pt-2">
+        <h2>Filter Project by week</h2>
+        <hr>
+        <form method="POST">
+            <div class="input-group mb-3">
+                <input class="form-control mr-5" name="week" type="week" placeholder="" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filter week</button>
+                </div>
+            </div>
+        </form>
+        {% if all_projects|length > 0 %}
+        <hr>
+        <h2 class="mb-3">Add Status</h2>
+        <table class="table table shadow bg-white rounded table-hover">
+            <thead style="background-color: #e1e5ea;">
+                <tr class="py-3">
+                    <th class="py-3" scope="col">#</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Project Name</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Start Date</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">End Date</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Project Manager</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Add Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in all_projects %}
+                <tr class='clickable-row' style="cursor: default;">
+                    <th class="py-3" scope="row">{{ loop.index }}</th>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        {{ project.project_name }}
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        {{ project.project_start_date.strftime('%d %b, %Y') }}
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        {{ project.project_end_date.strftime('%d %b, %Y') }}
+                    </td>
+                    <td class="pb-2 pt-3">
+                        {{ project.project_manager_name }}
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <a href="{{ url_for('project_status', project_id=project.project_id, w=week_end_date) }}"
+                            class="btn btn-sm btn-outline-success">Add</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        
+        {% if already_projects|length > 0 %}
+        <hr>
+        <h2 class="mb-3">Edit Status</h2>
+        <table class="table table shadow bg-white rounded table-hover">
+            <thead style="background-color: #e1e5ea;">
+                <tr class="py-3">
+                    <th class="py-3" scope="col">#</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Project Name</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Project Manager</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Week Ending Date</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Details</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Update Status</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Delete Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in already_projects %}
+                <div class="modal fade" id="exampleModal{{ loop.index|string }}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel{{ loop.index|string }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel{{ loop.index|string }}">
+                                    Project Details
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <strong>Project name: </strong>
+                                <p>
+                                    {{ project.project_name }}
+                                </p>
+                                <hr>
+                                <strong>Project manager email: </strong>
+                                <p>
+                                    {{ project.project_manager_email }}
+                                </p>
+                                <hr>
+                                <strong>Project mailing list: </strong>
+                                <p>
+                                    {% for p in project.project_daily_report_email.split(',') %}
+                                    {% if '@' in p %}
+                                    <b>{{ loop.index }}.</b> {{ p }} <br>
+                                    {% endif %}
+                                    {% endfor %}
+                                </p>
+                                {% if project_stats[loop.index - 1].project_status != '' %}
+                                <hr>
+                                <p>
+                                    <strong>Project status: </strong>{{ project_stats[loop.index - 1].project_status }}
+                                </p>
+                                {% endif %}
+                                {% if project_stats[loop.index - 1].project_risk != '' %}
+                                <hr>
+                                <p>
+                                    <strong>Project risk: </strong>{{ project_stats[loop.index - 1].project_risk }}
+                                </p>
+                                {% endif %}
+                                {% if project_stats[loop.index - 1].week_ending_date is not none %}
+                                <hr>
+                                <p>
+                                    <strong>Week Ending Date: </strong>{{ project_stats[loop.index - 1].week_ending_date.strftime('%d %b, %Y') }}
+                                </p>
+                                {% endif %}
+                                {% if project_stats[loop.index - 1].project_highlights != '' %}
+                                <hr>
+                                <p>
+                                    <strong>Project highlights: </strong>
+                                <p>
+                                    {{ project_stats[loop.index - 1].project_highlights|capitalize }}
+                                </p>
+                                </p>
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <tr class='clickable-row' style="cursor: default;">
+                    <th class="py-3" scope="row">{{ loop.index }}</th>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        {{ project.project_name }}
+                    </td>
+                    <td class="pb-2 pt-3">
+                        {{ project.project_manager_name }}
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        {{ project_stats[loop.index - 1].week_ending_date.strftime('%d %b, %Y') }}
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <button class="btn btn-sm btn-outline-primary" style="text-decoration: none; cursor: pointer;" data-toggle="modal"
+                            data-target="#exampleModal{{ loop.index|string }}">
+                            Details
+                        </button>
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <a href="{{ url_for('update_status', project_id=project.project_id, w=week_end_date) }}"
+                            class="btn btn-sm btn-outline-info">Update</a>
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <a href="{{ url_for('delete_status', project_id=project.project_id, w=week_end_date) }}"
+                            class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </section>
+</main>
+
+{% endblock %}

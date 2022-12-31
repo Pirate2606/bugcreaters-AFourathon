@@ -28,11 +28,12 @@
                             Add Project
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a style="font-size: 20px;" class="nav-link" href="{{ url_for('filter_projects') }}">
+                            Project Status
+                        </a>
+                    </li>
                 </ul>
-                <form class="form-inline my-2 my-lg-0 mr-5" method="POST">
-                    <input class="form-control mr-sm-2" name="week" type="week" placeholder="" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filter week</button>
-                </form>
             </div>
         </nav>
     </header>
@@ -87,33 +88,7 @@
                                         {% endif %}
                                         {% endfor %}
                                     </p>
-                                    {% if project.project_status != '' %}
-                                    <hr>
-                                     <p>
-                                        <strong>Project status: </strong>{{ project.project_status|capitalize }}
-                                     </p>
-                                    {% endif %}
-                                    {% if project.project_risk != '' %}
-                                    <hr>
-                                     <p>
-                                        <strong>Project risk: </strong>{{ project.project_risk|capitalize }}
-                                     </p>
-                                    {% endif %}
-                                    {% if project.week_ending_date is not none %}
-                                    <hr>
-                                     <p>
-                                        <strong>Week Ending Date: </strong>{{ project.week_ending_date.strftime('%d %b, %Y') }}
-                                     </p>
-                                    {% endif %}
-                                    {% if project.project_highlights != '' %}
-                                    <hr>
-                                     <p>
-                                        <strong>Project highlights: </strong>
-                                        <p>
-                                            {{ project.project_highlights|capitalize }}
-                                        </p>
-                                     </p>
-                                    {% endif %}
+                                    
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

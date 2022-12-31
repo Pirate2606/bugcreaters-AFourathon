@@ -79,6 +79,41 @@ def add_skills():
     return render_template('add_new_skill_form.html', login_flag=login_flag)
 
 
+@app.route('/skills', methods=['GET', 'POST'])
+def skills():
+    login_flag = True
+    if session.get("token"):
+        login_flag = False
+    all_skills = requests.get(f"{SKILLS_LIST_MICRO_APP_URL}/get-skills")
+    return render_template('skills.html', skills=all_skills.json()["skills"], login_flag=login_flag)
+
+
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    requests.delete(f"{SKILLS_LIST_MICRO_APP_URL}/delete-skill/{request.args.get('skill_id')}")
+    return redirect(url_for('skills'))
+
+
+@app.route('/update', methods=['GET', 'POST'])
+def update():
+    login_flag = True
+    if session.get("token"):
+        login_flag = False
+    if request.method == "POST":
+        skill_id = request.args.get('skill_id')
+        skill_name = request.form['skill_name']
+        skill_domain = request.form['skill_domain']
+        
+        data = {
+            "skill_name": skill_name,
+            "skill_domain": skill_domain
+        }
+        requests.put(f"{SKILLS_LIST_MICRO_APP_URL}/update-skill/{skill_id}", json=data)
+        return redirect(url_for('skills'))
+    skill = requests.get(f"{SKILLS_LIST_MICRO_APP_URL}/get-skill/{request.args.get('skill_id')}")
+    return render_template('update_skill.html', skill=skill.json()["skill"][0], login_flag=login_flag)
+
+
 @app.route('/choose-skills', methods=['GET', 'POST'])
 def choose_skills():
     login_flag = True

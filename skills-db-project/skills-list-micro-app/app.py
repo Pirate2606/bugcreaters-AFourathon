@@ -41,8 +41,37 @@ class GetSkills(Resource):
         return {"skills": skills}
 
 
+class GetSkill(Resource):
+    def get(self, skill_id):
+        results = db.engine.execute(f"SELECT * FROM skills WHERE id = '{skill_id}';")
+        for result in results:
+            return {"skill": [dict(result)]}
+
+
+class UpdateSkill(Resource):
+    def put(self, skill_id):
+        data = request.get_json()
+        db.engine.execute(
+            f'''
+                UPDATE skills 
+                SET skill_name = '{data['skill_name']}', skill_domain = '{data['skill_domain']}'
+                WHERE id = '{skill_id}';
+            '''
+        )
+        return {"message": "Skill updated successfully"}
+
+
+class DeleteSkill(Resource):
+    def delete(self, skill_id):
+        db.engine.execute(f"DELETE FROM skills WHERE id = '{skill_id}';")
+        return {"message": "Skill deleted successfully"}, 200
+
+
 api.add_resource(AddSkill, '/add-skill')
 api.add_resource(GetSkills, '/get-skills')
+api.add_resource(GetSkill, '/get-skill/<skill_id>')
+api.add_resource(UpdateSkill, '/update-skill/<skill_id>')
+api.add_resource(DeleteSkill, '/delete-skill/<skill_id>')
 
 
 if __name__ == '__main__':

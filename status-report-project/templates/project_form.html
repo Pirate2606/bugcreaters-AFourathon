@@ -4,85 +4,109 @@
 <title>Project Details</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/project_form.css') }}" />
 {% endblock %}
-    
+
 {% block content %}
 
-
-    <div class="container-sm text-center">
-        <br>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="alert alert-dismissible fade show" role="alert" style="background-color:#ffc06d; color:black;">
-            {% for message in messages %}
-            {{ message }}
-            {% endfor %}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+<div class="container register">
+    <div class="row">
+        <div class="col-md-3 register-left pt-lg-5 mt-lg-5">
+            <i class="fa-solid fa-5x fa-diagram-project"></i>
+            <br>
+            <h3 style="padding-top: 30px;">Project Portal</h3>
+            <p style="font-weight: 400;">Please register your project here!</p>
         </div>
-        {% endif %}
-        {% endwith %}
-    </div>
-
-
-    <div class="container register">
-        <div class="row">
-            <div class="col-md-3 register-left pt-lg-5 mt-lg-5">
-                <i class="fa-solid fa-5x fa-diagram-project"></i>
-                <br>
-                <h3 style="padding-top: 30px;">Project Portal</h3>
-                <p style="font-weight: 400;">Please register your project here!</p>
-            </div>
-            <div class="col-md-9 register-right">
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <h3 class="register-heading">
-                            Register Project
-                        </h3>
-                        <form method="POST" , enctype="multipart/form-data">
-                            <div class="row register-form">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Project Name *" value=""
-                                            name="project_name" required />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Start Date *"
-                                            name="project_start_date" required 
-                                            onfocus="(this.type='date')" 
-                                            onblur="if(!this.value)this.type='text'" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="End Date *" value=""
-                                            name="project_end_date" required
-                                            onfocus="(this.type='date')" 
-                                            onblur="if(!this.value)this.type='text'"
-                                             />
-                                    </div>
+        <div class="col-md-9 register-right">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <h3 class="register-heading">
+                        Register Project
+                    </h3>
+                    <form method="POST" , enctype="multipart/form-data">
+                        <div class="row register-form">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Project Name *" value=""
+                                        name="project_name" required />
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Project Manager Name *" 
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Start Date *"
+                                        name="project_start_date" required onfocus="(this.type='date')"
+                                        onblur="if(!this.value)this.type='text'" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="End Date *" value=""
+                                        name="project_end_date" required onfocus="(this.type='date')"
+                                        onblur="if(!this.value)this.type='text'" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Project Manager Name *"
                                         name="project_manager_name" required />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="email" class="form-control" placeholder="Project Manager Email *" 
-                                        name="project_manager_email" required />
-                                    </div>
-                                    <div class="form-group files">
-                                        <label for="email_list">Mailing List *</label>
-                                        <textarea style="height: 100px" class="form-control" name="project_daily_report_email"
-                                            placeholder="Enter emails seperated by comma" required></textarea>
-                                    </div>
-                                    <input type="submit" class="btnRegister" value="Register" />
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Project Manager Email *"
+                                        name="project_manager_email" required />
+                                </div>
+                                <div class="form-group files">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="user_form">Mailing List *</label>
+                                        </div>
+                                        <select class="custom-select" name="users" onchange="addUser()" id="user_form">
+                                            <option selected="selected" disabled="disabled" value="">Select...</option>
+                                            {% for user in users %}
+                                            <option value="{{ user.user_email }}">{{ user.user_name }}, {{
+                                                user.user_email }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <textarea onchange="addUser()" style="height: 100px" class="form-control"
+                                        name="project_daily_report_email" id="daily_report_email_textarea"
+                                        placeholder="Select users from above dropdown" required readonly></textarea>
+                                </div>
+                                <input type="submit" class="btnRegister" value="Register" />
+                            </div>
+                        </div>
+                    </form>
                 </div>
+                <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab"></div>
             </div>
         </div>
     </div>
+</div>
+
+<script>
+    function fillUsers(already_selected_users) {
+        console.log(already_selected_users);
+        var all_users = {{ users|safe }};
+        document.getElementById("user_form").innerHTML = '<option selected="selected" disabled="disabled" value="">Select...</option>';
+        for (var i = 0; i < all_users.length; i++) {
+            if (!already_selected_users.includes(all_users[i].user_email)) {
+                document.getElementById("user_form").innerHTML += "<option value='" + all_users[i].user_email + "'>" + all_users[i].user_name + ', ' + all_users[i].user_email + "</option>";
+            }
+        }
+    }
+
+    function addUser() {
+        var selected_user = document.getElementById("user_form").value;
+        if (selected_user != '') {
+            var textbox = document.getElementById("daily_report_email_textarea");
+            if (textbox.value == '')
+                textbox.innerHTML = selected_user;
+            else
+                textbox.innerHTML = textbox.innerHTML + ',' + selected_user;
+        }
+
+        var users = document.getElementById("daily_report_email_textarea").value.split(',');
+        var already_selected_users = [];
+        for (var i = 0; i < users.length; i++) {
+            already_selected_users.push(users[i]);
+        }
+        fillUsers(already_selected_users);
+    }
+
+
+</script>
 
 {% endblock %}

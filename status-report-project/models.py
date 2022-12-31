@@ -23,3 +23,10 @@ class ProjectStatus(db.Model):
     project_risk = db.Column(db.String(256), default="")
     project_highlights = db.Column(db.String(256), default="")
     week_ending_date = db.Column(db.DateTime)
+
+
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(256))
+    user_name = db.Column(db.String(256))
+    user_email = db.Column(db.String(256))

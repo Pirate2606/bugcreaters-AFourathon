@@ -99,32 +99,96 @@
                 <tr class="py-3">
                     <th class="py-3" scope="col">#</th>
                     <th class="py-3 d-none d-lg-table-cell" scope="col">Project Name</th>
-                    <th class="py-3 d-none d-lg-table-cell" scope="col">Start Date</th>
-                    <th class="py-3 d-none d-lg-table-cell" scope="col">End Date</th>
                     <th class="py-3 d-none d-lg-table-cell" scope="col">Project Manager</th>
                     <th class="py-3 d-none d-lg-table-cell" scope="col">Week Ending Date</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Details</th>
                     <th class="py-3 d-none d-lg-table-cell" scope="col">Update Status</th>
                     <th class="py-3 d-none d-lg-table-cell" scope="col">Delete Status</th>
                 </tr>
             </thead>
             <tbody>
                 {% for project in already_projects %}
+                <div class="modal fade" id="exampleModal{{ loop.index|string }}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel{{ loop.index|string }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel{{ loop.index|string }}">
+                                    Project Details
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <strong>Project name: </strong>
+                                <p>
+                                    {{ project.project_name }}
+                                </p>
+                                <hr>
+                                <strong>Project manager email: </strong>
+                                <p>
+                                    {{ project.project_manager_email }}
+                                </p>
+                                <hr>
+                                <strong>Project mailing list: </strong>
+                                <p>
+                                    {% for p in project.project_daily_report_email.split(',') %}
+                                    {% if '@' in p %}
+                                    <b>{{ loop.index }}.</b> {{ p }} <br>
+                                    {% endif %}
+                                    {% endfor %}
+                                </p>
+                                {% if project_stats[loop.index - 1].project_status != '' %}
+                                <hr>
+                                <p>
+                                    <strong>Project status: </strong>{{ project_stats[loop.index - 1].project_status }}
+                                </p>
+                                {% endif %}
+                                {% if project_stats[loop.index - 1].project_risk != '' %}
+                                <hr>
+                                <p>
+                                    <strong>Project risk: </strong>{{ project_stats[loop.index - 1].project_risk }}
+                                </p>
+                                {% endif %}
+                                {% if project_stats[loop.index - 1].week_ending_date is not none %}
+                                <hr>
+                                <p>
+                                    <strong>Week Ending Date: </strong>{{ project_stats[loop.index - 1].week_ending_date.strftime('%d %b, %Y') }}
+                                </p>
+                                {% endif %}
+                                {% if project_stats[loop.index - 1].project_highlights != '' %}
+                                <hr>
+                                <p>
+                                    <strong>Project highlights: </strong>
+                                <p>
+                                    {{ project_stats[loop.index - 1].project_highlights|capitalize }}
+                                </p>
+                                </p>
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <tr class='clickable-row' style="cursor: default;">
                     <th class="py-3" scope="row">{{ loop.index }}</th>
                     <td class="pb-2 pt-3 d-none d-lg-table-cell">
                         {{ project.project_name }}
-                    </td>
-                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
-                        {{ project.project_start_date.strftime('%d %b, %Y') }}
-                    </td>
-                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
-                        {{ project.project_end_date.strftime('%d %b, %Y') }}
                     </td>
                     <td class="pb-2 pt-3">
                         {{ project.project_manager_name }}
                     </td>
                     <td class="pb-2 pt-3 d-none d-lg-table-cell">
                         {{ project_stats[loop.index - 1].week_ending_date.strftime('%d %b, %Y') }}
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <button class="btn btn-sm btn-outline-primary" style="text-decoration: none; cursor: pointer;" data-toggle="modal"
+                            data-target="#exampleModal{{ loop.index|string }}">
+                            Details
+                        </button>
                     </td>
                     <td class="pb-2 pt-3 d-none d-lg-table-cell">
                         <a href="{{ url_for('update_status', project_id=project.project_id, w=week_end_date) }}"

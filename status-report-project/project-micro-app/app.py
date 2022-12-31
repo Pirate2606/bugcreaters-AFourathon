@@ -24,10 +24,7 @@ class RegisterProject(Resource):
                             project_end_date, 
                             project_manager_name, 
                             project_manager_email,
-                            project_daily_report_email,
-                            project_status,
-                            project_risk,
-                            project_highlights) 
+                            project_daily_report_email) 
                         VALUES (
                             '{project_data['project_id']}',
                             '{project_data['project_name']}',
@@ -35,10 +32,7 @@ class RegisterProject(Resource):
                             '{datetime.strptime(project_data['project_end_date'], '%Y-%m-%d')}',
                             '{project_data['project_manager_name']}',
                             '{project_data['project_manager_email']}',
-                            '{project_data['project_daily_report_email']}',
-                            '',
-                            '',
-                            ''
+                            '{project_data['project_daily_report_email']}'
                             );
                         '''
                         )
@@ -62,33 +56,41 @@ class UpdateProject(Resource):
             project_end_date = datetime.strptime(project_data['project_end_date'], "%Y-%m-%d %H:%M:%S").date()
         except:
             project_end_date = datetime.strptime(project_data['project_end_date'], "%Y-%m-%d")
-        try:
-            week_ending_date = datetime.strptime(project_data['week_ending_date'], "%Y-%m-%d %H:%M:%S").date()
-        except:
-            week_ending_date = datetime.strptime(project_data['week_ending_date'], "%Y-%m-%d")
         
         db.engine.execute(f'''
                           UPDATE project_details 
                           SET 
                             project_name = '{project_data['project_name']}',
-                            project_start_date = '{project_start_date}',
-                            project_end_date = '{project_end_date}',
+                            project_start_date = '{datetime.combine(project_start_date, datetime.min.time())}',
+                            project_end_date = '{datetime.combine(project_end_date, datetime.min.time())}',
                             project_manager_name = '{project_data['project_manager_name']}',
                             project_manager_email = '{project_data['project_manager_email']}',
-                            project_daily_report_email = '{project_data['project_daily_report_email']}',
-                            project_status = '{project_data['project_status']}',
-                            project_risk = '{project_data['project_risk']}',
-                            project_highlights = '{project_data['project_highlights']}',
-                            week_ending_date = '{week_ending_date}'
+                            project_daily_report_email = '{project_data['project_daily_report_email']}'
                           WHERE
                             project_id = '{project_id}'
                           ''')
         return {"message": "Project updated successfully"}, 200
 
 
+class GetProjects(Resource):
+    def get(self):
+        projects = db.engine.execute(f"SELECT * FROM project_details")
+        all_projects = [dict(project) for project in projects]
+        return {"projects": all_projects}, 200
+
+
+class GetProjectDetails(Resource):
+    def get(self, project_id):
+        project_details = db.engine.execute(f"SELECT * FROM project_details WHERE project_id = '{project_id}'")
+        projects = [dict(project) for project in project_details]
+        return {"projects": projects}, 200
+
+
 api.add_resource(RegisterProject, '/register-project')
 api.add_resource(DeleteProject, '/delete-project/<project_id>')
 api.add_resource(UpdateProject, '/edit-project/<project_id>')
+api.add_resource(GetProjects, '/get-projects')
+api.add_resource(GetProjectDetails, '/get-project/<project_id>')
 
 
 if __name__ == '__main__':

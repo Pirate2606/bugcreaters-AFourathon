@@ -78,7 +78,6 @@
 
 <script>
     function fillUsers(already_selected_users) {
-        console.log(already_selected_users);
         var all_users = {{ users|safe }};
         document.getElementById("user_form").innerHTML = '<option selected="selected" disabled="disabled" value="">Select...</option>';
         for (var i = 0; i < all_users.length; i++) {

@@ -8,10 +8,14 @@ services:
         build: ./email-report-micro-app/
         ports: 
             - 5002:5002
+    update-status-micro-app:
+        build: ./update-status-micro-app/
+        ports: 
+            - 5050:5050
     web:
         build: ./
         ports:
-            - "5000:5000"
+            - 5000:5000
         links:
             - db
     db:

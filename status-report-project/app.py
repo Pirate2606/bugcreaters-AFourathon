@@ -4,16 +4,19 @@ from config import Config
 from datetime import datetime, timedelta
 import uuid
 import requests
+import logging
+import json
 
 
+logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 app.config.from_object(Config)
 db.init_app(app)
-PROJECT_MICRO_APP_URL = 'http://127.0.0.1:5001'
-EMAIL_REPORT_MICRO_APP_URL = 'http://127.0.0.1:5002'
-UPDATE_STATUS_MICRO_APP = 'http://127.0.0.1:5050'
-# PROJECT_MICRO_APP_URL = 'http://project-micro-app:5001'
-# EMAIL_REPORT_MICRO_APP_URL = 'http://email-report-micro-app:5002'
-# UPDATE_STATUS_MICRO_APP = 'http://update-status-micro-app:5050'
+# PROJECT_MICRO_APP_URL = 'http://127.0.0.1:5001'
+# EMAIL_REPORT_MICRO_APP_URL = 'http://127.0.0.1:5002'
+# UPDATE_STATUS_MICRO_APP = 'http://127.0.0.1:5050'
+PROJECT_MICRO_APP_URL = 'http://project-micro-app:5001'
+EMAIL_REPORT_MICRO_APP_URL = 'http://email-report-micro-app:5002'
+UPDATE_STATUS_MICRO_APP = 'http://update-status-micro-app:5050'
 
 
 @app.before_first_request
@@ -25,6 +28,8 @@ def before_first_request():
 @app.route('/', methods=['GET', 'POST'])
 def project_home():
     projects = requests.get(f"{PROJECT_MICRO_APP_URL}/get-projects").json()['projects']
+    for i in range(len(projects)):
+        projects[i] = json.loads(projects[i])
     for project in projects:
         project['project_start_date'] = datetime.strptime(project['project_start_date'], '%Y-%m-%d %H:%M:%S')
         project['project_end_date'] = datetime.strptime(project['project_end_date'], '%Y-%m-%d %H:%M:%S')
@@ -62,6 +67,7 @@ def register_project():
 @app.route('/edit-project/<project_id>', methods=['GET', 'POST'])
 def edit_project(project_id):
     project = requests.get(f"{PROJECT_MICRO_APP_URL}/get-project/{project_id}").json()['projects'][0]
+    project = json.loads(project)
     if request.method == 'POST':
         project_data = {
             "project_id": project_id,
@@ -74,7 +80,14 @@ def edit_project(project_id):
         }
         requests.put(f"{PROJECT_MICRO_APP_URL}/edit-project/{project_id}", json=project_data)
         return redirect(url_for('project_home'))
-    return render_template('project_update.html', project=project)
+    users = []
+    show_users = []
+    emails = project['project_daily_report_email'].split(',')
+    for user in Users.query.all():
+        if user.user_email not in emails:
+            show_users.append({'user_name': user.user_name, 'user_email': user.user_email})
+        users.append({'user_name': user.user_name, 'user_email': user.user_email})
+    return render_template('project_update.html', project=project, users=users, show_users=show_users)
 
 
 @app.route('/delete-project/<project_id>', methods=['GET', 'POST'])
@@ -87,15 +100,19 @@ def delete_project(project_id):
 def filter_projects():
     if request.method == 'POST':
         projects = requests.get(f"{PROJECT_MICRO_APP_URL}/get-projects").json()['projects']
+        for i in range(len(projects)):
+            projects[i] = json.loads(projects[i])
         for project in projects:
             project['project_start_date'] = datetime.strptime(project['project_start_date'], '%Y-%m-%d %H:%M:%S')
             project['project_end_date'] = datetime.strptime(project['project_end_date'], '%Y-%m-%d %H:%M:%S')
         week_start_date = datetime.strptime(request.form["week"] + '-1', "%Y-W%W-%w")
         week_end_date = week_start_date + timedelta(days=4)
         project_stats = requests.get(f"{UPDATE_STATUS_MICRO_APP}/get-status/<{str(week_end_date).split(' ')[0]}>").json()['status']
+        for i in range(len(project_stats)):
+            project_stats[i] = json.loads(project_stats[i])
         project_ids = []
         for stat in project_stats:
-            stat['week_ending_date'] = datetime.strptime(stat['week_ending_date'], '%Y-%m-%d')
+            stat['week_ending_date'] = datetime.strptime(stat['week_ending_date'], '%Y-%m-%d %H:%M:%S')
             project_ids.append(stat['project_id'])
         all_projects = []
         already_projects = []
@@ -122,6 +139,7 @@ def project_status(project_id):
         requests.post(f"{UPDATE_STATUS_MICRO_APP}/project-status/{project_id}", json=status_data)
         return redirect(url_for('filter_projects'))
     project = requests.get(f"{PROJECT_MICRO_APP_URL}/get-project/{project_id}").json()['projects'][0]
+    project = json.loads(project)
     return render_template('project_status.html', project=project, week_end_date=request.args.get('w').split(" ")[0])
 
 
@@ -137,7 +155,9 @@ def update_status(project_id):
         requests.put(f"{UPDATE_STATUS_MICRO_APP}/project-status/{project_id}", json=status_data)
         return redirect(url_for('filter_projects'))
     project = requests.get(f"{PROJECT_MICRO_APP_URL}/get-project/{project_id}").json()['projects'][0]
+    project = json.loads(project)
     status = requests.get(f"{UPDATE_STATUS_MICRO_APP}/project-status/{project_id}?w={request.args.get('w').split(' ')[0]}").json()["status"][0]
+    status = json.loads(status)
     return render_template('project_status_update.html', project=project, status=status)
 
 

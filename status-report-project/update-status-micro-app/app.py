@@ -2,7 +2,7 @@ from flask import Flask, request
 from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
-from datetime import datetime
+import json
 
 
 app = Flask(__name__)
@@ -59,7 +59,7 @@ class ProjectStatus(Resource):
         results = db.engine.execute(f'''
                                     SELECT * FROM project_status WHERE project_id = '{project_id}' AND week_ending_date = '{week_ending_date}'
                                     ''')
-        status = [dict(result) for result in results]
+        status = [json.dumps(dict(result), default=str) for result in results]
         return {"status": status}, 200
 
 
@@ -68,7 +68,7 @@ class GetProjectStatusWeekly(Resource):
         results = db.engine.execute(f'''
                                     SELECT * FROM project_status WHERE week_ending_date = '{week_ending_date.split("<")[1].split(">")[0]}'
                                     ''')
-        status = [dict(result) for result in results]
+        status = [json.dumps(dict(result), default=str) for result in results]
         return {"status": status}, 200
         
 

@@ -3,6 +3,7 @@ from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
 from datetime import datetime
+import json
 
 
 app = Flask(__name__)
@@ -75,14 +76,14 @@ class UpdateProject(Resource):
 class GetProjects(Resource):
     def get(self):
         projects = db.engine.execute(f"SELECT * FROM project_details")
-        all_projects = [dict(project) for project in projects]
+        all_projects = [json.dumps(dict(project), default=str) for project in projects]
         return {"projects": all_projects}, 200
 
 
 class GetProjectDetails(Resource):
     def get(self, project_id):
         project_details = db.engine.execute(f"SELECT * FROM project_details WHERE project_id = '{project_id}'")
-        projects = [dict(project) for project in project_details]
+        projects = [json.dumps(dict(project), default=str) for project in project_details]
         return {"projects": projects}, 200
 
 

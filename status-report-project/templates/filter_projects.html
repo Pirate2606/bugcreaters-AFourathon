@@ -104,6 +104,7 @@
                     <th class="py-3 d-none d-lg-table-cell" scope="col">Details</th>
                     <th class="py-3 d-none d-lg-table-cell" scope="col">Update Status</th>
                     <th class="py-3 d-none d-lg-table-cell" scope="col">Delete Status</th>
+                    <th class="py-3 d-none d-lg-table-cell" scope="col">Send Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -197,6 +198,10 @@
                     <td class="pb-2 pt-3 d-none d-lg-table-cell">
                         <a href="{{ url_for('delete_status', project_id=project.project_id, w=week_end_date) }}"
                             class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                    <td class="pb-2 pt-3 d-none d-lg-table-cell">
+                        <a href="{{ url_for('project_status_mail', project_id=project.project_id, w=week_end_date) }}"
+                            class="btn btn-sm btn-outline-info">Send</a>
                     </td>
                 </tr>
                 {% endfor %}

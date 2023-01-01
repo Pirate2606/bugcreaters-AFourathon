@@ -161,15 +161,15 @@ def update_status(project_id):
     return render_template('project_status_update.html', project=project, status=status)
 
 
-@app.route('/delete-satus/<project_id>', methods=['GET', 'POST'])
+@app.route('/delete-satus/<project_id>')
 def delete_status(project_id):
     requests.delete(f"{UPDATE_STATUS_MICRO_APP}/project-status/{project_id}?w={request.args.get('w').split(' ')[0]}")
     return redirect(url_for('filter_projects'))
 
 
-@app.route('/project-status-mail')
-def project_status_mail():
-    requests.get(f"{EMAIL_REPORT_MICRO_APP_URL}/send-project-status-mail/{request.args.get('project_id')}")
+@app.route('/project-status-mail/<project_id>')
+def project_status_mail(project_id):
+    requests.get(f"{EMAIL_REPORT_MICRO_APP_URL}/send-project-status-mail/{project_id}?w={request.args.get('w').split(' ')[0]}")
     return redirect(url_for('project_home'))
 
 

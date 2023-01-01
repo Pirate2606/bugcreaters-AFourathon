@@ -9,11 +9,11 @@ app.config.from_object(SendMailConfig)
 mail = Mail(app)
 
 
-def send_project_status_mail(project):
-    msg = Message(f'Status of {project.project_name} for week ending {project.week_ending_date.strftime("%d %b, %Y")}')
-    address = project.project_daily_report_email.split(",")
+def send_project_status_mail(mail_list):
+    msg = Message(f'''Status of {mail_list[1]['project_name']} for week ending {mail_list[0]['week_ending_date'].strftime("%d %b, %Y")}''')
+    address = mail_list[1]['project_daily_report_email'].split(",")
     for email in address:
         if '@' in email:
             msg.recipients.append(str(email))
-    msg.html = render_template("project_status_mail.html", project=project)
+    msg.html = render_template("project_status_mail.html", project=mail_list[1], status=mail_list[0])
     mail.send(msg)

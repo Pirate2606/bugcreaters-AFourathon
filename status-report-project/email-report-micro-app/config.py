@@ -9,6 +9,7 @@ class Config(object):
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///F:\\Programs\\Hackathons\\AFourathon_2.0\\data.sqlite'
     SQLALCHEMY_DATABASE_URI = 'postgresql://aditya:Supersecret@db:5432/projectA'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    DEBUG = True
 
 
 class SendMailConfig(object):

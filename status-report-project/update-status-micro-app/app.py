@@ -3,6 +3,7 @@ from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
 import json
+import logging
 
 
 app = Flask(__name__)
@@ -10,6 +11,7 @@ api = Api(app)
 app.config.from_object(Config)
 db = SQLAlchemy()
 db.init_app(app)
+logging.basicConfig(filename='logs/update_status_m_a.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 
 class ProjectStatus(Resource):
@@ -77,4 +79,4 @@ api.add_resource(GetProjectStatusWeekly, '/get-status/<week_ending_date>')
 
 
 if __name__ == '__main__':
-    app.run(port=5050, debug=True)
+    app.run(port=5050)

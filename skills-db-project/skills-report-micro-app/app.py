@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from config import Config
 import pandas as pd
 from google.cloud import storage
+import logging
 
 
 app = Flask(__name__)
@@ -12,6 +13,7 @@ api = Api(app)
 app.config.from_object(Config)
 db = SQLAlchemy()
 db.init_app(app)
+logging.basicConfig(filename='skills_report_m_a.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 
 class FilterSkills(Resource):
@@ -78,4 +80,4 @@ api.add_resource(DownloadFile, '/get-file')
 
 
 if __name__ == '__main__':
-    app.run(port=5006, debug=True)
+    app.run(port=5006)

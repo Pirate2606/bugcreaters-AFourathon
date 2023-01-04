@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from config import Config
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
+import logging
 
 
 app = Flask(__name__)
@@ -11,6 +12,7 @@ api = Api(app)
 app.config.from_object(Config)
 db = SQLAlchemy()
 db.init_app(app)
+logging.basicConfig(filename='choose_skills_m_a.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 JWT_TOKEN_SECRET = "superSecret"
 
@@ -109,6 +111,5 @@ api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
 
 
-
 if __name__ == '__main__':
-    app.run(port=5005, debug=True)
+    app.run(port=5005)

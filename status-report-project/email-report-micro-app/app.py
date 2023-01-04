@@ -3,12 +3,14 @@ from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
 from flask import request
+import logging
 
 
 api = Api(app)
 app.config.from_object(Config)
 db = SQLAlchemy()
 db.init_app(app)
+logging.basicConfig(filename='logs/email_report_m_a.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 
 class SendMail(Resource):
@@ -29,4 +31,4 @@ api.add_resource(SendMail, '/send-project-status-mail/<project_id>')
 
 
 if __name__ == '__main__':
-    app.run(port=5002, debug=True)
+    app.run(port=5002)

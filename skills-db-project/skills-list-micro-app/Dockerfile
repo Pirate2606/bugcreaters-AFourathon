@@ -9,4 +9,4 @@ RUN pip3 install -r requirements.txt
 EXPOSE 5004
 ENV PORT 5004
 
-CMD exec gunicorn --bind :$PORT --workers 4 --threads 12 --timeout 0 app:app
+CMD exec gunicorn --log-file /app/logs/skill_list_m_a.log --log-level DEBUG --bind :$PORT app:app

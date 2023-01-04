@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from config import Config
 from datetime import datetime
 import json
+import logging
 
 
 app = Flask(__name__)
@@ -11,6 +12,7 @@ api = Api(app)
 app.config.from_object(Config)
 db = SQLAlchemy()
 db.init_app(app)
+logging.basicConfig(filename='logs/project_m_a.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 
 class RegisterProject(Resource):
@@ -95,4 +97,4 @@ api.add_resource(GetProjectDetails, '/get-project/<project_id>')
 
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(port=5001)

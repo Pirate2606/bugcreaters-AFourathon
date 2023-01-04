@@ -9,3 +9,4 @@ class Config(object):
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data.sqlite') or os.environ.get('DATABASE_URL')
     SQLALCHEMY_DATABASE_URI = 'postgresql://aditya:Supersecret@db:5432/projectA'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    DEBUG = True

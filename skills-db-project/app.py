@@ -5,8 +5,10 @@ from config import Config
 import requests
 import uuid
 import jwt
+import logging
 
 
+logging.basicConfig(filename='app.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 app.config.from_object(Config)
 db.init_app(app)
 SKILLS_LIST_MICRO_APP_URL = 'http://127.0.0.1:5004'
@@ -219,4 +221,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run(port=5003, debug=True)
+    app.run(port=5003)

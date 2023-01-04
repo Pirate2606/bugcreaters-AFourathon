@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
+import logging
 
 
 app = Flask(__name__)
@@ -9,6 +10,7 @@ api = Api(app)
 app.config.from_object(Config)
 db = SQLAlchemy()
 db.init_app(app)
+logging.basicConfig(filename='skill_list_m_a.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 
 class AddSkill(Resource):
@@ -75,4 +77,4 @@ api.add_resource(DeleteSkill, '/delete-skill/<skill_id>')
 
 
 if __name__ == '__main__':
-    app.run(port=5004, debug=True)
+    app.run(port=5004)

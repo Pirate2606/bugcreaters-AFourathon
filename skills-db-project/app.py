@@ -11,12 +11,12 @@ import logging
 logging.basicConfig(filename='app.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 app.config.from_object(Config)
 db.init_app(app)
-SKILLS_LIST_MICRO_APP_URL = 'http://127.0.0.1:5004'
-CHOOSE_SKILLS_MICRO_APP_URL = 'http://127.0.0.1:5005'
-SKILLS_REPORT_MICRO_APP_URL = 'http://127.0.0.1:5006'
-# SKILLS_LIST_MICRO_APP_URL = 'http://skills-list-micro-app:5004'
-# CHOOSE_SKILLS_MICRO_APP_URL = 'http://choose-skills-micro-app:5005'
-# SKILLS_REPORT_MICRO_APP_URL = 'http://skills-report-micro-app:5006'
+# SKILLS_LIST_MICRO_APP_URL = 'http://127.0.0.1:5004'
+# CHOOSE_SKILLS_MICRO_APP_URL = 'http://127.0.0.1:5005'
+# SKILLS_REPORT_MICRO_APP_URL = 'http://127.0.0.1:5006'
+SKILLS_LIST_MICRO_APP_URL = 'http://skills-list-micro-app:5004'
+CHOOSE_SKILLS_MICRO_APP_URL = 'http://choose-skills-micro-app:5005'
+SKILLS_REPORT_MICRO_APP_URL = 'http://skills-report-micro-app:5006'
 JWT_TOKEN_SECRET = "superSecret"
 
 

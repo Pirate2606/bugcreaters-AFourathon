@@ -189,10 +189,14 @@
                         row.appendChild(fullname);
                         document.getElementsByTagName("tbody")[0].appendChild(row);
                     }
+                    var download_present = document.getElementsByClassName("btn btn-sm btn-outline-success download-btn");
+                    if (download_present.length > 0) {
+                        download_present[0].remove();
+                    }
                     var download = document.createElement("a");
                     var table = document.getElementById("table-row")
                     download.setAttribute("href", "{{ url_for('download_users') }}");
-                    download.setAttribute("class", "btn btn-sm btn-outline-success");
+                    download.setAttribute("class", "btn btn-sm btn-outline-success download-btn");
                     download.innerHTML = "Download";
                     table.appendChild(download);
                     table.style.display = "block";

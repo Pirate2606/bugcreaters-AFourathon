@@ -1,0 +1,20 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build the Docker image
+        uses: actions/checkout@v3
+      
+      - name: Run docker-compose
+        working-directory: ./status-report-project
+        run: docker compose up -d
+    

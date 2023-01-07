@@ -18,7 +18,7 @@ class SendMailConfig(object):
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
     MAIL_USERNAME = 'royalenaitan@gmail.com'
-    MAIL_PASSWORD = 'fhcnvibwngmpfetx'
+    MAIL_PASSWORD = ''
     MAIL_DEFAULT_SENDER = 'royalenaitan@gmail.com'
     MAIL_MAX_EMAILS = None
     MAIL_ASCII_ATTACHMENTS = False

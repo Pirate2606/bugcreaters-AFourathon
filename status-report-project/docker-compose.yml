@@ -5,19 +5,19 @@ services:
         ports: 
             - 5001:5001
         volumes:
-            - project_app_logs:/app/project-micro-app/logs
+            - project_app_logs:/app/logs
     email-report-micro-app:
         build: ./email-report-micro-app/
         ports: 
             - 5002:5002
         volumes:
-            - email_app_logs:/app/email-report-micro-app/logs
+            - email_app_logs:/app/logs
     update-status-micro-app:
         build: ./update-status-micro-app/
         ports: 
             - 5050:5050
         volumes:
-            - update_app_logs:/app/update-status-micro-app/logs
+            - update_app_logs:/app/logs
     web:
         build: ./
         ports:

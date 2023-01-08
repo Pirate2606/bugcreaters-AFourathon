@@ -17,3 +17,4 @@ def send_project_status_mail(mail_list):
             msg.recipients.append(str(email))
     msg.html = render_template("project_status_mail.html", project=mail_list[1], status=mail_list[0])
     mail.send(msg)
+    return "Mail sent successfully"

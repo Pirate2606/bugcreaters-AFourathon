@@ -5,19 +5,19 @@ services:
         ports: 
             - 5004:5004
         volumes:
-            - skill_list_logs:/app/skills-list-micro-app/logs
+            - skill_list_logs:/app/logs
     choose-skills-micro-app:
         build: ./choose-skills-micro-app/
         ports: 
             - 5005:5005
         volumes:
-            - choose_skills_logs:/app/choose-skills-micro-app/logs
+            - choose_skills_logs:/app/logs
     skills-report-micro-app:
         build: ./skills-report-micro-app/
         ports: 
             - 5006:5006
         volumes:
-            - skills_report_logs:/app/skills-report-micro-app/logs
+            - skills_report_logs:/app/logs
     web:
         build: ./
         ports:

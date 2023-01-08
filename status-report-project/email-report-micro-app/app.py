@@ -15,6 +15,7 @@ logging.basicConfig(filename='logs/email_report_m_a.log', format='%(asctime)s - 
 
 class SendMail(Resource):
     def get(self, project_id):
+        message = "Mail send error"
         week_ending_date = request.args.get('w')
         status = db.engine.execute(f"SELECT * FROM project_status WHERE project_id = '{project_id}' AND week_ending_date = '{week_ending_date}'")
         project = db.engine.execute(f"SELECT * FROM project_details WHERE project_id = '{project_id}'")
@@ -23,8 +24,11 @@ class SendMail(Resource):
             mail_list.append(dict(stat))
         for pro in project:
             mail_list.append(dict(pro))
-        send_project_status_mail(mail_list)
-        return {"message": "Mail sent successfully"}, 200
+        if len(mail_list) > 0:
+            message = send_project_status_mail(mail_list)
+        else:
+            return {"message": message}, 200
+        return {"message": message}, 200
 
 
 api.add_resource(SendMail, '/send-project-status-mail/<project_id>')

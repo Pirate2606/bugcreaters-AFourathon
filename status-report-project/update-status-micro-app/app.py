@@ -34,12 +34,12 @@ class ProjectStatus(Resource):
                             );
                         '''
                         )
-        return {"message": "Project registered successfully"}, 200
+        return {"message": "Status registered successfully"}, 200
     
     def delete(self, project_id):
         week_ending_date = request.args.get('w')
         db.engine.execute(f"DELETE FROM project_status WHERE project_id = '{project_id}' AND week_ending_date = '{week_ending_date}'")
-        return {"message": "Project deleted successfully"}, 200
+        return {"message": "Status deleted successfully"}, 200
     
     def put(self, project_id):
         project_data = request.get_json()
@@ -54,7 +54,7 @@ class ProjectStatus(Resource):
                             project_id = '{project_id}' AND
                             week_ending_date = '{project_data['week_ending_date']}'
                           ''')
-        return {"message": "Project updated successfully"}, 200
+        return {"message": "Status updated successfully"}, 200
     
     def get(self, project_id):
         week_ending_date = request.args.get('w')

@@ -1,14 +1,15 @@
 from flask import Flask, request
 from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
-from config import Config
+from config import Config, DeploymentConfig
 import json
 import logging
 
 
 app = Flask(__name__)
 api = Api(app)
-app.config.from_object(Config)
+# app.config.from_object(Config)
+app.config.from_object(DeploymentConfig)
 db = SQLAlchemy()
 db.init_app(app)
 logging.basicConfig(filename='logs/update_status_m_a.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')

@@ -6,18 +6,24 @@ services:
             - 5004:5004
         volumes:
             - skill_list_logs:/app/logs
+        depends_on:
+            - db
     choose-skills-micro-app:
         build: ./choose-skills-micro-app/
         ports: 
             - 5005:5005
         volumes:
             - choose_skills_logs:/app/logs
+        depends_on:
+            - db
     skills-report-micro-app:
         build: ./skills-report-micro-app/
         ports: 
             - 5006:5006
         volumes:
             - skills_report_logs:/app/logs
+        depends_on:
+            - db
     web:
         build: ./
         ports:
@@ -26,6 +32,8 @@ services:
             - db
         volumes:
             - app_logs:/app/logs
+        depends_on:
+            - db
     db:
         image: postgres:12-alpine
         volumes:
@@ -38,8 +46,8 @@ services:
             - 5432:5432
     
 volumes:
-  postgres_data:
-  app_logs:
-  choose_skills_logs:
-  skill_list_logs:
-  skills_report_logs:
+    postgres_data:
+    app_logs:
+    choose_skills_logs:
+    skill_list_logs:
+    skills_report_logs:

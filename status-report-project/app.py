@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, Flask
 from models import db, Users
-from config import Config
+from config import Config, DeploymentConfig
 from datetime import datetime, timedelta
 import uuid
 import requests
@@ -13,18 +13,14 @@ logging.basicConfig(filename='logs/app.log', format='%(asctime)s - %(levelname)s
 
 # Setting up app
 app = Flask(__name__)
-app.config.from_object(Config)
+# app.config.from_object(Config)
+app.config.from_object(DeploymentConfig)
 db.init_app(app)
 
 # Setting up micro-apps LOCAL
-PROJECT_MICRO_APP_URL = 'http://127.0.0.1:5001'
-EMAIL_REPORT_MICRO_APP_URL = 'http://127.0.0.1:5002'
-UPDATE_STATUS_MICRO_APP = 'http://127.0.0.1:5050'
-
-# Setting up micro-apps DOCKER
-# PROJECT_MICRO_APP_URL = 'http://project-micro-app:5001'
-# EMAIL_REPORT_MICRO_APP_URL = 'http://email-report-micro-app:5002'
-# UPDATE_STATUS_MICRO_APP = 'http://update-status-micro-app:5050'
+PROJECT_MICRO_APP_URL = app.config['PROJECT_MICRO_APP_URL']
+EMAIL_REPORT_MICRO_APP_URL = app.config['EMAIL_REPORT_MICRO_APP_URL']
+UPDATE_STATUS_MICRO_APP = app.config['UPDATE_STATUS_MICRO_APP']
 
 
 # Create tables before first request

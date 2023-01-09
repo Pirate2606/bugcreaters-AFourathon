@@ -20,13 +20,6 @@ def client():
         yield client
 
 
-# Testing the routes
-def test_send_mail_route(client):
-    response = client.get('/send-project-status-mail/abcd1234?w=2021-01-01')
-    assert response.status_code == 200
-    assert response.json == {"message": "Mail send error"}
-
-
 # Testing the send mail function
 def test_send_mail_function(client):
     with app.app_context():

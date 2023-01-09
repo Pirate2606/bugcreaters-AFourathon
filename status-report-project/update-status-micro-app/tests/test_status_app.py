@@ -43,14 +43,14 @@ def test_edit_status(client):
 
 def test_get_status(client):
     response = client.get('/project-status/abcd1234?w=2021-01-01')
-    status = ['{"id": 1, "project_id": "abcd1234", "project_status": "Completed", "project_risk": "Very Low", "project_highlights": "Comments", "week_ending_date": "2021-01-01"}']
+    status = ['{"id": 1, "project_id": "abcd1234", "project_status": "Completed", "project_risk": "Very Low", "project_highlights": "Comments", "week_ending_date": "2021-01-01 00:00:00"}']
     assert response.status_code == 200
     assert response.json == {"status": status}
 
 
 def test_all_weekly_status(client):
     response = client.get('/get-status/<2021-01-01>')
-    status = ['{"id": 1, "project_id": "abcd1234", "project_status": "Completed", "project_risk": "Very Low", "project_highlights": "Comments", "week_ending_date": "2021-01-01"}']
+    status = ['{"id": 1, "project_id": "abcd1234", "project_status": "Completed", "project_risk": "Very Low", "project_highlights": "Comments", "week_ending_date": "2021-01-01 00:00:00"}']
     assert response.status_code == 200
     assert response.json == {"status": status}
 

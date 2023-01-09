@@ -4,18 +4,24 @@ services:
         build: ./project-micro-app/
         ports: 
             - 5001:5001
+        depends_on:
+            - db
         volumes:
             - project_app_logs:/app/logs
     email-report-micro-app:
         build: ./email-report-micro-app/
         ports: 
             - 5002:5002
+        depends_on:
+            - db
         volumes:
             - email_app_logs:/app/logs
     update-status-micro-app:
         build: ./update-status-micro-app/
         ports: 
             - 5050:5050
+        depends_on:
+            - db
         volumes:
             - update_app_logs:/app/logs
     web:
@@ -23,6 +29,8 @@ services:
         ports:
             - 5000:5000
         links:
+            - db
+        depends_on:
             - db
         volumes:
             - app_logs:/app/logs
@@ -38,8 +46,8 @@ services:
             - 5432:5432
     
 volumes:
-  postgres_data:
-  app_logs:
-  email_app_logs:
-  project_app_logs:
-  update_app_logs:
+    postgres_data:
+    app_logs:
+    email_app_logs:
+    project_app_logs:
+    update_app_logs:

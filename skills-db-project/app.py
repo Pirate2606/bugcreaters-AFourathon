@@ -1,7 +1,7 @@
 import os
-from flask import render_template, request, redirect, url_for, session, send_file, flash
-from models import app, db
-from config import Config
+from flask import Flask, render_template, request, redirect, url_for, session, send_file, flash
+from models import db
+from config import Config, DeploymentConfig
 import requests
 import uuid
 import jwt
@@ -9,14 +9,16 @@ import logging
 
 
 logging.basicConfig(filename='app.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
-app.config.from_object(Config)
+app = Flask(__name__)
+# app.config.from_object(Config)
+app.config.from_object(DeploymentConfig)
 db.init_app(app)
-# SKILLS_LIST_MICRO_APP_URL = 'http://127.0.0.1:5004'
-# CHOOSE_SKILLS_MICRO_APP_URL = 'http://127.0.0.1:5005'
-# SKILLS_REPORT_MICRO_APP_URL = 'http://127.0.0.1:5006'
-SKILLS_LIST_MICRO_APP_URL = 'http://skills-list-micro-app:5004'
-CHOOSE_SKILLS_MICRO_APP_URL = 'http://choose-skills-micro-app:5005'
-SKILLS_REPORT_MICRO_APP_URL = 'http://skills-report-micro-app:5006'
+
+SKILLS_LIST_MICRO_APP_URL = app.config['SKILLS_LIST_MICRO_APP_URL']
+CHOOSE_SKILLS_MICRO_APP_URL = app.config['CHOOSE_SKILLS_MICRO_APP_URL']
+SKILLS_REPORT_MICRO_APP_URL = app.config['SKILLS_REPORT_MICRO_APP_URL']
+
+
 JWT_TOKEN_SECRET = "superSecret"
 
 
@@ -69,12 +71,12 @@ def add_skills():
         skill_name = request.form['skill_name']
         skill_domain = request.form['skill_domain']
         
-        project_data = {
+        skill_data = {
             "skill_name": skill_name,
             "skill_domain": skill_domain
         }
         
-        response = requests.post(f"{SKILLS_LIST_MICRO_APP_URL}/add-skill", json=project_data)
+        response = requests.post(f"{SKILLS_LIST_MICRO_APP_URL}/add-skill", json=skill_data)
         if response.status_code == 400:
             flash("Skill already exists")
         return redirect(url_for('add_skills'))
@@ -143,7 +145,7 @@ def choose_skills():
 
 @app.route('/update-skill/<skill_id>')
 def update_skill(skill_id):
-    yoe = request.args.get('y')
+    yoe = int(request.args.get('y'))
     skill_level = request.args.get('l')
     skill_data = {
         "skill_level": skill_level,

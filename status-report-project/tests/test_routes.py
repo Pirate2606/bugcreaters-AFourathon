@@ -1,7 +1,6 @@
 import pytest
 from mockito import when, mock
 import requests
-import uuid
 import os, sys
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
@@ -10,14 +9,9 @@ from app import app
 
 
 # Setting up micro-apps LOCAL
-PROJECT_MICRO_APP_URL = 'http://127.0.0.1:5001'
-EMAIL_REPORT_MICRO_APP_URL = 'http://127.0.0.1:5002'
-UPDATE_STATUS_MICRO_APP = 'http://127.0.0.1:5050'
-
-# Setting up micro-apps DOCKER
-# PROJECT_MICRO_APP_URL = 'http://project-micro-app:5001'
-# EMAIL_REPORT_MICRO_APP_URL = 'http://email-report-micro-app:5002'
-# UPDATE_STATUS_MICRO_APP = 'http://update-status-micro-app:5050'
+PROJECT_MICRO_APP_URL = app.config['PROJECT_MICRO_APP_URL']
+EMAIL_REPORT_MICRO_APP_URL = app.config['EMAIL_REPORT_MICRO_APP_URL']
+UPDATE_STATUS_MICRO_APP = app.config['UPDATE_STATUS_MICRO_APP']
 
 @pytest.fixture
 def client():

@@ -7,6 +7,6 @@ WORKDIR /app
 RUN pip3 install -r requirements.txt
 
 EXPOSE 5002
-ENV PORT 5002
+ENV PORT 5002 
 
-CMD exec gunicorn --log-file /app/logs/email_report_m_a.log --log-level DEBUG --bind :$PORT app:app
+CMD bash -c "pytest tests && exec gunicorn --log-file /app/logs/email_report_m_a.log --log-level DEBUG --bind :$PORT app:app"
